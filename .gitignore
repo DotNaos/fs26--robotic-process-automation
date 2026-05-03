@@ -1,4 +1,10 @@
-.DS_Store
+.env
+.env.*
+!.env.example
+
+.moodle-downloads/
+
+# Python/build artifacts
 .venv/
 __pycache__/
 *.pyc
@@ -10,3 +16,21 @@ build/
 *.sqlite
 secrets/
 exports/
+
+# UiPath local/build artifacts
+**/.local/
+**/.objects/
+**/.settings/
+**/bin/
+**/obj/
+**/*.dll
+**/*.nupkg
+
+# Windows alternate data stream metadata copied into WSL
+*:Zone.Identifier
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

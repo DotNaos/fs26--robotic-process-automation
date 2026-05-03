@@ -1,19 +1,19 @@
-# Process Automation
+# FS26 Robotic Process Automation
 
-Private workspace for the FS26 automation project.
+Private workspace fuer das FS26-RPA-Projekt.
 
-## Goal
+## UiPath Projekt
 
-Document, design, and implement an automation workflow for the selected process.
+- UiPath-Projekt: `Lernplan_mit_LLM - Kopie/`
+- Einstiegspunkt: `Main.xaml`
+- Ziel-Framework: Windows
+- Workflow: Moodle Services API -> Gemini -> Lernplan-Ausgabe
 
-## Structure
+## Struktur
 
-- `docs/`: project notes and writeups
-- `process/`: process maps, templates, and structured inputs
-- `automation/`: implementation files
-- `assets/`: screenshots or supporting media
+- `Lernplan_mit_LLM - Kopie/`: UiPath Studio Projekt
+- `unterlagen/`: Prozess- und SDD-Unterlagen
+- `process/`: Prozessnotizen und Modellierung
+- `automation/`: weitere Automationsartefakte
 
-## Notes
-
-- Keep sensitive process data out of git.
-- Add tool-specific files only after the implementation direction is fixed.
+Lokale Secrets gehoeren in `.env` oder in UiPath-Eingaben und werden nicht versioniert.
