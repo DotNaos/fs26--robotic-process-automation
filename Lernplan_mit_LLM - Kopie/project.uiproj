@@ -1,0 +1,6 @@
+{
+  "Name": "Lernplan_mit_LLM",
+  "ProjectType": "Process",
+  "Description": "Lernplan",
+  "MainFile": "Main.xaml"
+}
