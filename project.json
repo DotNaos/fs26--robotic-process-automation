@@ -14,13 +14,13 @@
   "entitiesStores": [],
   "schemaVersion": "4.0",
   "studioVersion": "25.10.8.0",
-  "projectVersion": "1.0.3-fs26-import",
+  "projectVersion": "1.0.14-sanitized-markdown-render",
   "runtimeOptions": {
     "autoDispose": false,
     "netFrameworkLazyLoading": false,
     "isPausable": true,
     "isAttended": false,
-    "requiresUserInteraction": true,
+    "requiresUserInteraction": false,
     "supportsPersistence": false,
     "workflowSerialization": "NewtonsoftJson",
     "excludedLoggedData": [

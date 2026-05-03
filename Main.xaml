@@ -85,8 +85,9 @@
       <Variable x:TypeArguments="x:String" Name="GeminiApiKey" />
       <Variable x:TypeArguments="x:String" Name="MoodleApiKey" />
       <Variable x:TypeArguments="x:String" Default="[&quot;gemma-4-31b-it&quot;]" Name="GeminiModel" />
-      <Variable x:TypeArguments="x:String" Name="MoodleUsername" />
-      <Variable x:TypeArguments="x:String" Name="MoodlePassword" />
+      <Variable x:TypeArguments="x:String" Name="EnvFilePath" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Default="[New Dictionary(Of String, String)()]" Name="EnvConfig" />
+      <Variable x:TypeArguments="x:Boolean" Default="[False]" Name="SendEmail" />
       <Variable x:TypeArguments="x:Int32" Default="[100]" Name="MinLaengeLLM" />
       <Variable x:TypeArguments="x:String" Default="[&quot;&quot;]" Name="WarningMessages" />
       <Variable x:TypeArguments="x:String" Default="[&quot;https://moodle-services.os-home.net&quot;]" Name="MoodleBaseUrl" />
@@ -98,6 +99,7 @@
       <Variable x:TypeArguments="x:String" Default="[&quot;smtp.gmail.com&quot;]" Name="SmtpHost" />
       <Variable x:TypeArguments="x:Int32" Default="[587]" Name="SmtpPort" />
       <Variable x:TypeArguments="x:String" Name="SmtpUsername" />
+      <Variable x:TypeArguments="x:String" Name="SmtpFromAddress" />
       <Variable x:TypeArguments="x:String" Name="SmtpPassword" />
       <Variable x:TypeArguments="x:Object" Name="SmtpCallResult" />
     </Flowchart.Variables>
@@ -126,44 +128,100 @@
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
-        <Assign DisplayName="Eingabe: Moodle API Key" sap2010:WorkflowViewState.IdRef="Assign_Cfg1">
+        <Assign DisplayName=".env Pfad festlegen" sap2010:WorkflowViewState.IdRef="Assign_Cfg0">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[EnvFilePath]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(Not String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("RPA_ENV_PATH")) AndAlso System.IO.File.Exists(Environment.GetEnvironmentVariable("RPA_ENV_PATH")), Environment.GetEnvironmentVariable("RPA_ENV_PATH"), If(System.IO.File.Exists(System.IO.Path.Combine(Environment.CurrentDirectory, ".env")), System.IO.Path.Combine(Environment.CurrentDirectory, ".env"), System.IO.File.ReadAllText("__missing_.env_or_RPA_ENV_PATH__")))]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName=".env laden" sap2010:WorkflowViewState.IdRef="Assign_Cfg0b">
+          <Assign.To>
+            <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[EnvConfig]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[System.IO.File.ReadAllLines(EnvFilePath).Where(Function(line) Not String.IsNullOrWhiteSpace(line) AndAlso Not line.TrimStart().StartsWith("#") AndAlso line.Contains("=")).Select(Function(line) line.Split(New Char() {"="c}, 2)).ToDictionary(Function(parts) parts(0).Trim(), Function(parts) parts(1).Trim().Trim(Chr(34)))]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Moodle API Key aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg1">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[MoodleApiKey]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[InputBox("Bitte Moodle Services API Key eingeben:", "Konfiguration - Schritt 1/4: Moodle API", "")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("MOODLE_API_KEY") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("MOODLE_API_KEY")), EnvConfig("MOODLE_API_KEY"), System.IO.File.ReadAllText("__missing_env_MOODLE_API_KEY__"))]</InArgument>
           </Assign.Value>
         </Assign>
-        <Assign DisplayName="Eingabe: Gemini API Key" sap2010:WorkflowViewState.IdRef="Assign_Cfg2">
+        <Assign DisplayName="Gemini API Key aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg2">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[GeminiApiKey]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[InputBox("Bitte Gemini API Key eingeben:", "Konfiguration - Schritt 2/4: KI-Konfiguration", "")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("GEMINI_API_KEY") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("GEMINI_API_KEY")), EnvConfig("GEMINI_API_KEY"), System.IO.File.ReadAllText("__missing_env_GEMINI_API_KEY__"))]</InArgument>
           </Assign.Value>
         </Assign>
-        <Assign DisplayName="Eingabe: Empfaenger E-Mail" sap2010:WorkflowViewState.IdRef="Assign_Cfg4">
+        <Assign DisplayName="Empfaenger E-Mail aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg4">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[BenutzerEmail]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[InputBox("Bitte Empfaenger E-Mail Adresse eingeben:", "Konfiguration - Schritt 3/4: E-Mail", "michal.karczmarzyk@stud.fhgr.ch")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("RECIPIENT_EMAIL") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("RECIPIENT_EMAIL")), EnvConfig("RECIPIENT_EMAIL"), "")]</InArgument>
           </Assign.Value>
         </Assign>
-        <Assign DisplayName="Eingabe: SMTP Benutzername" sap2010:WorkflowViewState.IdRef="Assign_Cfg5">
+        <Assign DisplayName="E-Mail Versand optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg4b">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">[SendEmail]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">[EnvConfig.ContainsKey("SEND_EMAIL") AndAlso EnvConfig("SEND_EMAIL").Trim().ToLower() = "true"]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Gmail Absender-Adresse aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg5">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[SmtpUsername]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[InputBox("Bitte SMTP Benutzername (Absender E-Mail) eingeben:", "Konfiguration - Schritt 4/4: SMTP", "")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("GMAIL_ADDRESS") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("GMAIL_ADDRESS")), EnvConfig("GMAIL_ADDRESS"), "")]</InArgument>
           </Assign.Value>
         </Assign>
-        <Assign DisplayName="Eingabe: SMTP Passwort" sap2010:WorkflowViewState.IdRef="Assign_Cfg6">
+        <Assign DisplayName="Gmail Plus-Absender festlegen" sap2010:WorkflowViewState.IdRef="Assign_Cfg5b">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[SmtpFromAddress]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("SMTP_FROM_ADDRESS") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("SMTP_FROM_ADDRESS")), EnvConfig("SMTP_FROM_ADDRESS"), If(SmtpUsername.ToLower().EndsWith("@gmail.com"), SmtpUsername.Substring(0, SmtpUsername.Length - "@gmail.com".Length) &amp; "+uipath-moodle@gmail.com", SmtpUsername))]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Gmail App-Passwort aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[SmtpPassword]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[InputBox("Bitte SMTP Passwort eingeben:", "Konfiguration - Schritt 4/4: SMTP", "")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("GMAIL_APP_PASSWORD") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("GMAIL_APP_PASSWORD")), EnvConfig("GMAIL_APP_PASSWORD"), "")]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Semester optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6b">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[SemesterFilter]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("SEMESTER_FILTER") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("SEMESTER_FILTER")), EnvConfig("SEMESTER_FILTER"), SemesterFilter)]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Gemini Modell optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6c">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[GeminiModel]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("GEMINI_MODEL") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("GEMINI_MODEL")), EnvConfig("GEMINI_MODEL"), GeminiModel)]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Moodle API URL optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6d">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[MoodleBaseUrl]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("MOODLE_BASE_URL") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("MOODLE_BASE_URL")), EnvConfig("MOODLE_BASE_URL").TrimEnd("/"c), MoodleBaseUrl)]</InArgument>
           </Assign.Value>
         </Assign>
         <Assign DisplayName="PDF-Pfad festlegen" sap2010:WorkflowViewState.IdRef="Assign_Cfg7">
@@ -171,7 +229,7 @@
             <OutArgument x:TypeArguments="x:String">[PDFFilePath]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lernplan_" &amp; SemesterFilter &amp; ".txt")]</InArgument>
+            <InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lernplan_" &amp; SemesterFilter &amp; ".md")]</InArgument>
           </Assign.Value>
         </Assign>
         <WriteLine DisplayName="[Init] Config und API-Keys geladen" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;[Initialisierung] Config geladen. Moodle API: &quot; &amp; MoodleBaseUrl &amp; &quot; | Semester: &quot; &amp; SemesterFilter &amp; &quot; | Modell: &quot; &amp; GeminiModel]" />
@@ -372,7 +430,7 @@
                                         <OutArgument x:TypeArguments="x:String">[GeminiResponseJson]</OutArgument>
                                       </Assign.To>
                                       <Assign.Value>
-                                        <InArgument x:TypeArguments="x:String">[(New System.Net.Http.HttpClient() With {.Timeout = System.TimeSpan.FromSeconds(120)}).PostAsync("https://generativelanguage.googleapis.com/v1beta/models/" &amp; GeminiModel &amp; ":generateContent?key=" &amp; GeminiApiKey, New System.Net.Http.StringContent(JObject.FromObject(New With {.contents = New Object() {New With {.parts = New Object() {New With {.text = "Erstelle einen vollständigen, strukturierten Lernplan für das Semester " &amp; SemesterFilter &amp; " auf Deutsch. Umfasse Lernziele, Wochenplan, Themen und Prüfungsvorbereitung." &amp; Environment.NewLine &amp; Environment.NewLine &amp; "=== KURSDETAILS ===" &amp; Environment.NewLine &amp; KursDetails &amp; Environment.NewLine &amp; Environment.NewLine &amp; "=== SEMESTERINFORMATIONEN ===" &amp; Environment.NewLine &amp; SemesterInfo}}}}}).ToString(), System.Text.Encoding.UTF8, "application/json")).Result.Content.ReadAsStringAsync().Result]</InArgument>
+                                        <InArgument x:TypeArguments="x:String">[(New System.Net.Http.HttpClient() With {.Timeout = System.TimeSpan.FromSeconds(420)}).PostAsync("https://generativelanguage.googleapis.com/v1beta/models/" &amp; GeminiModel &amp; ":generateContent?key=" &amp; GeminiApiKey, New System.Net.Http.StringContent(JObject.FromObject(New With {.systemInstruction = New With {.parts = New Object() {New With {.text = "Du bist ein deutschsprachiger Lerncoach. Schreibe ausschliesslich den finalen Lernplan als Markdown. Wiederhole keine Aufgabenstellung, keine Regeln, keine Constraints und keine internen Ueberlegungen. Verwende nur deutsche Abschnittstitel. Beginne mit genau einer H1-Ueberschrift und danach mit H2-Abschnitten: Ueberblick, Lernziele, Wochenplan, Materialien, Pruefungsvorbereitung, Naechste Schritte. Wenn Daten fehlen, nutze einen kurzen H2-Abschnitt Annahmen."}}}, .contents = New Object() {New With {.parts = New Object() {New With {.text = "Erstelle den finalen Lernplan fuer Semester " &amp; SemesterFilter &amp; " und Kurs " &amp; AktuellerKursID &amp; "." &amp; Environment.NewLine &amp; "Die Ausgabe muss direkt mit '# Lernplan " &amp; SemesterFilter &amp; " - Kurs " &amp; AktuellerKursID &amp; "' beginnen." &amp; Environment.NewLine &amp; Environment.NewLine &amp; "Kursdetails:" &amp; Environment.NewLine &amp; KursDetails &amp; Environment.NewLine &amp; Environment.NewLine &amp; "Semesterinformationen:" &amp; Environment.NewLine &amp; SemesterInfo}}}}, .generationConfig = New With {.temperature = 0.2, .topP = 0.8}}).ToString(), System.Text.Encoding.UTF8, "application/json")).Result.Content.ReadAsStringAsync().Result]</InArgument>
                                       </Assign.Value>
                                     </Assign>
                                     <Assign DisplayName="LLM-Antwort aus Gemini-Response extrahieren" sap2010:WorkflowViewState.IdRef="Assign_ExtractLLM">
@@ -429,23 +487,23 @@
                                                   <av:PointCollection x:Key="ConnectorLocation">1230,185 1230,255</av:PointCollection>
                                                 </scg:Dictionary>
                                               </sap:WorkflowViewStateService.ViewState>
-                                              <Sequence DisplayName="PDF Report generieren" sap:VirtualizedContainerService.HintSize="110,70" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                                              <Sequence DisplayName="Markdown Report speichern" sap:VirtualizedContainerService.HintSize="110,70" sap2010:WorkflowViewState.IdRef="Sequence_11">
                                                 <sap:WorkflowViewStateService.ViewState>
                                                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                                   </scg:Dictionary>
                                                 </sap:WorkflowViewStateService.ViewState>
-                                                <Assign DisplayName="PDF-Pfad für diesen Kurs festlegen" sap2010:WorkflowViewState.IdRef="Assign_PDFPath">
+                                                <Assign DisplayName="Markdown-Pfad für diesen Kurs festlegen" sap2010:WorkflowViewState.IdRef="Assign_PDFPath">
                                                   <Assign.To>
                                                     <OutArgument x:TypeArguments="x:String">[PDFFilePath]</OutArgument>
                                                   </Assign.To>
                                                   <Assign.Value>
-                                                    <InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lernplan_" &amp; SemesterFilter &amp; "_Kurs" &amp; AktuellerKursID &amp; ".txt")]</InArgument>
+                                                    <InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lernplan_" &amp; SemesterFilter &amp; "_Kurs" &amp; AktuellerKursID &amp; ".md")]</InArgument>
                                                   </Assign.Value>
                                                 </Assign>
-                                                <InvokeMethod DisplayName="Lernplan-Textdatei schreiben" MethodName="WriteAllText" TargetType="si:File">
+                                                <InvokeMethod DisplayName="Lernplan-Markdown schreiben" MethodName="WriteAllText" TargetType="si:File">
                                                   <InArgument x:TypeArguments="x:String">[PDFFilePath]</InArgument>
-                                                  <InArgument x:TypeArguments="x:String">["=== Lernplan " &amp; SemesterFilter &amp; " - Kurs " &amp; AktuellerKursID &amp; " ===" &amp; Environment.NewLine &amp; Environment.NewLine &amp; LLMAntwort]</InArgument>
+                                                  <InArgument x:TypeArguments="x:String">[If(LLMAntwort.TrimStart().StartsWith("#"), LLMAntwort, "# Lernplan " &amp; SemesterFilter &amp; " - Kurs " &amp; AktuellerKursID &amp; Environment.NewLine &amp; Environment.NewLine &amp; LLMAntwort)]</InArgument>
                                                 </InvokeMethod>
                                                 <WriteLine DisplayName="[Process Transaction] Lernplan gespeichert" Text="[&quot;[Process Transaction] Lernplan gespeichert: &quot; &amp; PDFFilePath]" />
                                               </Sequence>
@@ -563,15 +621,15 @@
                             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
-                        <Assign DisplayName="Abschluss-E-Mail senden (SMTP via CallByName)" sap2010:WorkflowViewState.IdRef="Assign_Email">
+                        <Assign DisplayName="Markdown als HTML/PDF rendern und E-Mail senden" sap2010:WorkflowViewState.IdRef="Assign_Email">
                           <Assign.To>
                             <OutArgument x:TypeArguments="x:Object">[SmtpCallResult]</OutArgument>
                           </Assign.To>
                           <Assign.Value>
-                            <InArgument x:TypeArguments="x:Object">[CallByName(New System.Net.Mail.SmtpClient(SmtpHost, SmtpPort) With {.EnableSsl = True, .Credentials = New System.Net.NetworkCredential(SmtpUsername, SmtpPassword)}, "Send", CallType.Method, SmtpUsername, BenutzerEmail, "Lernplan " &amp; SemesterFilter, "Guten Tag," &amp; Environment.NewLine &amp; Environment.NewLine &amp; "Im Anhang findest du den generierten Lernplan von diesem Semester." &amp; Environment.NewLine &amp; Environment.NewLine &amp; "Die Lernplaene wurden gespeichert unter:" &amp; Environment.NewLine &amp; System.IO.Path.GetDirectoryName(PDFFilePath) &amp; If(String.IsNullOrEmpty(WarningMessages), "", Environment.NewLine &amp; Environment.NewLine &amp; "Hinweise: " &amp; WarningMessages))]</InArgument>
+                            <InArgument x:TypeArguments="x:Object">[CallByName(System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("powershell.exe", "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File " &amp; Chr(34) &amp; System.IO.Path.Combine(Environment.CurrentDirectory, "scripts", "render_lernplan_email.ps1") &amp; Chr(34) &amp; " -OutputDir " &amp; Chr(34) &amp; Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) &amp; Chr(34) &amp; " -Semester " &amp; Chr(34) &amp; SemesterFilter &amp; Chr(34)) With {.UseShellExecute = False, .CreateNoWindow = True}), "WaitForExit", CallType.Method)]</InArgument>
                           </Assign.Value>
                         </Assign>
-                        <WriteLine DisplayName="[Abschluss] E-Mail gesendet" sap2010:WorkflowViewState.IdRef="WriteLine_11" Text="[&quot;[Abschluss] Alle Kurse verarbeitet. Abschluss-E-Mail gesendet an: &quot; &amp; BenutzerEmail]" />
+                        <WriteLine DisplayName="[Abschluss] E-Mail Status" sap2010:WorkflowViewState.IdRef="WriteLine_11" Text="[If(SendEmail, &quot;[Abschluss] Alle Kurse verarbeitet. HTML-Mail mit PDF-Anhaengen vorbereitet/gesendet an: &quot; &amp; BenutzerEmail, &quot;[Abschluss] Alle Kurse verarbeitet. Markdown/HTML/PDF gerendert; E-Mail Versand uebersprungen (SEND_EMAIL=false).&quot;)]" />
                       </Sequence>
                     </FlowStep>
                   </FlowDecision.False>
