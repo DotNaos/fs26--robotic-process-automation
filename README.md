@@ -4,14 +4,22 @@ Private workspace fuer das FS26-RPA-Projekt.
 
 ## UiPath Projekt
 
-- UiPath-Projekt: `Lernplan_mit_LLM - Kopie/`
+- UiPath-Projekt: Repo-Root
 - Einstiegspunkt: `Main.xaml`
 - Ziel-Framework: Windows
 - Workflow: Moodle Services API -> Gemini -> Lernplan-Ausgabe
+- Ausgabe: pro Kurs Markdown, HTML und PDF im Dokumente-Ordner
+- Abschluss-Mail: Lernplaene direkt als HTML im Mailbody, PDFs zusaetzlich als Anhang
+- Konfiguration: `.env` im Projekt-Root, siehe `.env.example`
+- Mailversand: Gmail SMTP ueber `smtp.gmail.com`; `GMAIL_ADDRESS` wird als Login genutzt und standardmaessig als Plus-Adresse `name+uipath-moodle@gmail.com` verwendet
+- `SEND_EMAIL=false` ueberspringt den Mailversand und benoetigt keine Gmail-Werte
+- Beim Ausfuehren eines gepackten `.nupkg` kann `RPA_ENV_PATH` auf die lokale `.env` zeigen
 
 ## Struktur
 
-- `Lernplan_mit_LLM - Kopie/`: UiPath Studio Projekt
+- `Main.xaml`: UiPath Einstiegspunkt
+- `project.json`: UiPath Projektdefinition
+- `scripts/render_lernplan_email.ps1`: rendert Markdown zu HTML/PDF und versendet optional die HTML-Mail mit PDF-Anhaengen
 - `unterlagen/`: Prozess- und SDD-Unterlagen
 - `process/`: Prozessnotizen und Modellierung
 - `automation/`: weitere Automationsartefakte
