@@ -346,15 +346,52 @@ if (-not $sendEmail) {
     exit 0
 }
 
-foreach ($required in @("RECIPIENT_EMAIL", "GMAIL_ADDRESS", "GMAIL_APP_PASSWORD")) {
-    if (-not $config.ContainsKey($required) -or [string]::IsNullOrWhiteSpace($config[$required])) {
-        throw "SEND_EMAIL=true, aber $required fehlt in der .env."
-    }
+if (-not $config.ContainsKey("RECIPIENT_EMAIL") -or [string]::IsNullOrWhiteSpace($config["RECIPIENT_EMAIL"])) {
+    throw "SEND_EMAIL=true, aber RECIPIENT_EMAIL fehlt in der .env."
+}
+
+$smtpHost = "smtp.gmail.com"
+if ($config.ContainsKey("SMTP_HOST") -and -not [string]::IsNullOrWhiteSpace($config["SMTP_HOST"])) {
+    $smtpHost = $config["SMTP_HOST"].Trim()
+}
+
+$smtpPort = 587
+if ($config.ContainsKey("SMTP_PORT") -and -not [string]::IsNullOrWhiteSpace($config["SMTP_PORT"])) {
+    $smtpPort = [int]$config["SMTP_PORT"]
+}
+
+$smtpEnableSsl = $smtpHost -eq "smtp.gmail.com"
+if ($config.ContainsKey("SMTP_ENABLE_SSL") -and -not [string]::IsNullOrWhiteSpace($config["SMTP_ENABLE_SSL"])) {
+    $smtpEnableSsl = $config["SMTP_ENABLE_SSL"].Trim().ToLowerInvariant() -in @("1", "true", "yes", "on")
+}
+
+$smtpUsername = ""
+if ($config.ContainsKey("SMTP_USERNAME") -and -not [string]::IsNullOrWhiteSpace($config["SMTP_USERNAME"])) {
+    $smtpUsername = $config["SMTP_USERNAME"].Trim()
+} elseif ($config.ContainsKey("GMAIL_ADDRESS") -and -not [string]::IsNullOrWhiteSpace($config["GMAIL_ADDRESS"])) {
+    $smtpUsername = $config["GMAIL_ADDRESS"].Trim()
+}
+
+$smtpPassword = ""
+if ($config.ContainsKey("SMTP_PASSWORD") -and -not [string]::IsNullOrWhiteSpace($config["SMTP_PASSWORD"])) {
+    $smtpPassword = $config["SMTP_PASSWORD"]
+} elseif ($config.ContainsKey("GMAIL_APP_PASSWORD") -and -not [string]::IsNullOrWhiteSpace($config["GMAIL_APP_PASSWORD"])) {
+    $smtpPassword = $config["GMAIL_APP_PASSWORD"]
+}
+
+if ($smtpHost -eq "smtp.gmail.com" -and ([string]::IsNullOrWhiteSpace($smtpUsername) -or [string]::IsNullOrWhiteSpace($smtpPassword))) {
+    throw "SEND_EMAIL=true mit Gmail SMTP benoetigt GMAIL_ADDRESS und GMAIL_APP_PASSWORD oder SMTP_USERNAME und SMTP_PASSWORD."
 }
 
 $from = $config["SMTP_FROM_ADDRESS"]
 if ([string]::IsNullOrWhiteSpace($from)) {
-    $from = $config["GMAIL_ADDRESS"] -replace "@gmail\.com$", "+uipath-moodle@gmail.com"
+    if (-not [string]::IsNullOrWhiteSpace($smtpUsername) -and $smtpUsername.ToLowerInvariant().EndsWith("@gmail.com")) {
+        $from = $smtpUsername -replace "@gmail\.com$", "+uipath-moodle@gmail.com"
+    } elseif (-not [string]::IsNullOrWhiteSpace($smtpUsername) -and $smtpUsername.Contains("@")) {
+        $from = $smtpUsername
+    } else {
+        $from = "uipath-moodle@localhost"
+    }
 }
 
 $body = New-FullHtmlDocument -Title "Lernplaene $Semester" -Body @"
@@ -364,7 +401,7 @@ $($renderedPlans -join "`n")
 "@
 
 $message = New-Object System.Net.Mail.MailMessage
-$client = New-Object System.Net.Mail.SmtpClient("smtp.gmail.com", 587)
+$client = New-Object System.Net.Mail.SmtpClient($smtpHost, $smtpPort)
 try {
     $message.From = $from
     $message.To.Add($config["RECIPIENT_EMAIL"])
@@ -376,10 +413,12 @@ try {
         $message.Attachments.Add((New-Object System.Net.Mail.Attachment($attachment))) | Out-Null
     }
 
-    $client.EnableSsl = $true
-    $client.Credentials = New-Object System.Net.NetworkCredential($config["GMAIL_ADDRESS"], ($config["GMAIL_APP_PASSWORD"] -replace "\s+", ""))
+    $client.EnableSsl = $smtpEnableSsl
+    if (-not [string]::IsNullOrWhiteSpace($smtpUsername) -and -not [string]::IsNullOrWhiteSpace($smtpPassword)) {
+        $client.Credentials = New-Object System.Net.NetworkCredential($smtpUsername, ($smtpPassword -replace "\s+", ""))
+    }
     $client.Send($message)
-    Write-Host "E-Mail mit HTML-Body und PDF-Anhaengen gesendet an $($config["RECIPIENT_EMAIL"])."
+    Write-Host "E-Mail mit HTML-Body und PDF-Anhaengen ueber $smtpHost`:$smtpPort gesendet an $($config["RECIPIENT_EMAIL"])."
 } finally {
     $message.Dispose()
     $client.Dispose()
