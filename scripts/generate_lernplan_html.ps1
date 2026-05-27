@@ -224,19 +224,44 @@ function Convert-ParagraphsToHtml {
 
 function Invoke-MoodleApi {
     param([string]$BaseUrl, [string]$ApiKey, [string]$Path)
-    $headers = @{ "X-Moodle-App-Key" = $ApiKey }
+    $headers = @{}
+    if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
+        $headers["X-Moodle-App-Key"] = $ApiKey
+    }
     return Invoke-RestMethod -Headers $headers -Uri ($BaseUrl.TrimEnd("/") + $Path) -TimeoutSec 70
+}
+
+function Invoke-MoodleApiFirst {
+    param([string]$BaseUrl, [string]$ApiKey, [string[]]$Paths)
+
+    $lastError = $null
+    foreach ($path in $Paths) {
+        try {
+            return Invoke-MoodleApi -BaseUrl $BaseUrl -ApiKey $ApiKey -Path $path
+        } catch {
+            $lastError = $_
+        }
+    }
+
+    throw $lastError
 }
 
 function Select-Course {
     param([object]$CoursesResponse, [string]$CourseId)
-    $courses = if ($CoursesResponse.courses) { $CoursesResponse.courses } else { $CoursesResponse }
+    $courses = if ($CoursesResponse -is [System.Array]) {
+        $CoursesResponse
+    } elseif ($CoursesResponse.PSObject.Properties.Name -contains "courses") {
+        $CoursesResponse.courses
+    } else {
+        $CoursesResponse
+    }
     return $courses | Where-Object { [string]$_.id -eq [string]$CourseId } | Select-Object -First 1
 }
 
 function Get-Materials {
     param([object]$MaterialsResponse)
-    if ($MaterialsResponse.materials) { return @($MaterialsResponse.materials) }
+    if ($MaterialsResponse -is [System.Array]) { return @($MaterialsResponse) }
+    if ($MaterialsResponse.PSObject.Properties.Name -contains "materials") { return @($MaterialsResponse.materials) }
     return @($MaterialsResponse)
 }
 
@@ -310,7 +335,10 @@ function Get-MaterialSourceText {
     }
 
     try {
-        $textResponse = Invoke-MoodleApi -BaseUrl $BaseUrl -ApiKey $ApiKey -Path "/api/courses/$CourseId/materials/$($Material.id)/text"
+        $textResponse = Invoke-MoodleApiFirst -BaseUrl $BaseUrl -ApiKey $ApiKey -Paths @(
+            "/api/courses/$CourseId/materials/$($Material.id)/text",
+            "/api/courses/$CourseId/resources/$($Material.id)/text"
+        )
         $text = if ($textResponse.document -and $textResponse.document.text) { $textResponse.document.text } elseif ($textResponse.text) { $textResponse.text } else { "" }
         if ($text -match '^PK') { return "" }
         return Limit-Text $text 9000
@@ -454,7 +482,6 @@ $moodleApiKey = Get-EnvValue $envValues "MOODLE_API_KEY"
 $geminiApiKey = Get-EnvValue $envValues "GEMINI_API_KEY"
 $moodleBaseUrl = Get-EnvValue $envValues "MOODLE_BASE_URL" "https://moodle-services.os-home.net"
 if ([string]::IsNullOrWhiteSpace($Model)) { $Model = Get-EnvValue $envValues "GEMINI_MODEL" "gemini-2.5-flash" }
-if ([string]::IsNullOrWhiteSpace($moodleApiKey)) { throw "MOODLE_API_KEY fehlt." }
 if ([string]::IsNullOrWhiteSpace($geminiApiKey)) { throw "GEMINI_API_KEY fehlt." }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
@@ -463,7 +490,10 @@ $coursesResponse = Invoke-MoodleApi -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKe
 $course = Select-Course -CoursesResponse $coursesResponse -CourseId $CourseId
 if ($null -eq $course) { throw "Kurs $CourseId wurde in Moodle Services nicht gefunden." }
 
-$materialsResponse = Invoke-MoodleApi -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Path "/api/courses/$CourseId/materials"
+$materialsResponse = Invoke-MoodleApiFirst -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Paths @(
+    "/api/courses/$CourseId/materials",
+    "/api/courses/$CourseId/resources"
+)
 $materials = Get-Materials $materialsResponse
 $courseName = Repair-Text $course.fullname
 $courseTitle = ($courseName -replace '\s*\([^)]*\)\s*$', '').Trim()

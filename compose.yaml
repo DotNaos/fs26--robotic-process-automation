@@ -1,0 +1,33 @@
+name: fs26-rpa
+
+services:
+  moodle-api:
+    image: ghcr.io/dotnaos/moodle-services:latest
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        if [ -n "$$MOODLE_CALENDAR_URL" ]; then
+          moodle config set --calendar-url "$$MOODLE_CALENDAR_URL"
+        fi
+        exec moodle serve --addr :8080
+    environment:
+      PORT: "8080"
+      MOODLE_HOME: /data
+      MOODLE_USERNAME: ${MOODLE_USERNAME:-}
+      MOODLE_PASSWORD: ${MOODLE_PASSWORD:-}
+      MOODLE_CALENDAR_URL: ${MOODLE_CALENDAR_URL:-}
+    ports:
+      - "8080:8080"
+    volumes:
+      - moodle-data:/data
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    restart: unless-stopped
+
+volumes:
+  moodle-data:
