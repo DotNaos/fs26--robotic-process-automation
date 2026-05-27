@@ -316,9 +316,9 @@ if (-not (Test-Path -LiteralPath $outputPath)) {
     New-Item -ItemType Directory -Path $outputPath | Out-Null
 }
 
-$plans = Get-ChildItem -LiteralPath $outputPath -Filter "Lernplan_${Semester}_Kurs*.md" | Sort-Object Name
+$plans = Get-ChildItem -LiteralPath $outputPath -Filter "Lernplan_${Semester}_Kurs*.html" | Sort-Object Name
 if ($plans.Count -eq 0) {
-    throw "Keine Markdown-Lernplaene gefunden in $outputPath."
+    throw "Keine HTML-Lernplaene gefunden in $outputPath."
 }
 
 $browser = Find-Browser
@@ -326,17 +326,17 @@ $renderedPlans = @()
 $attachments = @()
 
 foreach ($plan in $plans) {
-    $markdown = Normalize-LearningPlanMarkdown (Get-Content -LiteralPath $plan.FullName -Raw)
-    Set-Content -LiteralPath $plan.FullName -Value $markdown -Encoding UTF8
-    $fragment = Convert-MarkdownToHtml $markdown
-    $fullHtml = New-FullHtmlDocument -Title $plan.BaseName -Body "<article class=`"plan`">$fragment</article>"
-    $htmlPath = [System.IO.Path]::ChangeExtension($plan.FullName, ".html")
+    $fullHtml = Get-Content -LiteralPath $plan.FullName -Raw -Encoding UTF8
+    $htmlPath = $plan.FullName
     $pdfPath = [System.IO.Path]::ChangeExtension($plan.FullName, ".pdf")
-
-    Set-Content -LiteralPath $htmlPath -Value $fullHtml -Encoding UTF8
     Convert-HtmlToPdf -HtmlPath $htmlPath -PdfPath $pdfPath -BrowserPath $browser
 
-    $renderedPlans += "<article class=`"plan`">$fragment</article>"
+    $bodyMatch = [regex]::Match($fullHtml, '(?is)<main\b[^>]*>(?<body>.*)</main>')
+    if ($bodyMatch.Success) {
+        $renderedPlans += "<article class=`"plan`">$($bodyMatch.Groups["body"].Value)</article>"
+    } else {
+        $renderedPlans += "<article class=`"plan`">$fullHtml</article>"
+    }
     $attachments += $pdfPath
 }
 

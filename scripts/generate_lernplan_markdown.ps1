@@ -87,8 +87,30 @@ function Invoke-MoodleApi {
         [string]$Path
     )
 
-    $headers = @{ "X-Moodle-App-Key" = $ApiKey }
+    $headers = @{}
+    if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
+        $headers["X-Moodle-App-Key"] = $ApiKey
+    }
     return Invoke-RestMethod -Headers $headers -Uri ($BaseUrl.TrimEnd("/") + $Path) -TimeoutSec 60
+}
+
+function Invoke-MoodleApiFirst {
+    param(
+        [string]$BaseUrl,
+        [string]$ApiKey,
+        [string[]]$Paths
+    )
+
+    $lastError = $null
+    foreach ($path in $Paths) {
+        try {
+            return Invoke-MoodleApi -BaseUrl $BaseUrl -ApiKey $ApiKey -Path $path
+        } catch {
+            $lastError = $_
+        }
+    }
+
+    throw $lastError
 }
 
 function Select-Course {
@@ -97,14 +119,28 @@ function Select-Course {
         [string]$CourseId
     )
 
-    $courses = if ($CoursesResponse.courses) { $CoursesResponse.courses } else { $CoursesResponse }
+    $courses = if ($CoursesResponse -is [System.Array]) {
+        $CoursesResponse
+    } elseif ($CoursesResponse.PSObject.Properties.Name -contains "courses") {
+        $CoursesResponse.courses
+    } else {
+        $CoursesResponse
+    }
     return $courses | Where-Object { [string]$_.id -eq [string]$CourseId } | Select-Object -First 1
+}
+
+function Get-Materials {
+    param([object]$MaterialsResponse)
+
+    if ($MaterialsResponse -is [System.Array]) { return @($MaterialsResponse) }
+    if ($MaterialsResponse.PSObject.Properties.Name -contains "materials") { return @($MaterialsResponse.materials) }
+    return @($MaterialsResponse)
 }
 
 function Convert-MaterialsForPrompt {
     param([object]$MaterialsResponse)
 
-    $materials = if ($MaterialsResponse.materials) { $MaterialsResponse.materials } else { $MaterialsResponse }
+    $materials = Get-Materials $MaterialsResponse
     $rows = @()
     foreach ($material in $materials) {
         $name = Repair-Text $material.name
@@ -206,7 +242,7 @@ function Read-OpenXmlText {
 function Select-SourceMaterials {
     param([object]$MaterialsResponse)
 
-    $materials = if ($MaterialsResponse.materials) { $MaterialsResponse.materials } else { $MaterialsResponse }
+    $materials = Get-Materials $MaterialsResponse
     $sourcePattern = 'Vorbereitung Block 3|Aufgabe.*Schluss|Bewertungskriterien|Erarbeitung Abschlussarbeit|Vorschlag Inhaltsverzeichnis|Beurteilungsraster|Abgabe Abschlussarbeit|Abgabe Schlussarbeit'
     return @(
         $materials |
@@ -237,7 +273,10 @@ function Get-MaterialSourceText {
     }
 
     try {
-        $textResponse = Invoke-MoodleApi -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Path "/api/courses/$CourseId/materials/$($Material.id)/text"
+        $textResponse = Invoke-MoodleApiFirst -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Paths @(
+            "/api/courses/$CourseId/materials/$($Material.id)/text",
+            "/api/courses/$CourseId/resources/$($Material.id)/text"
+        )
         $text = if ($textResponse.document -and $textResponse.document.text) { $textResponse.document.text } elseif ($textResponse.text) { $textResponse.text } else { "" }
         if ($text -match '^PK') {
             return ""
@@ -358,9 +397,6 @@ if ([string]::IsNullOrWhiteSpace($Model)) {
     $Model = Get-EnvValue $envValues "GEMINI_MODEL" "gemini-2.5-flash"
 }
 
-if ([string]::IsNullOrWhiteSpace($moodleApiKey)) {
-    throw "MOODLE_API_KEY fehlt."
-}
 if ([string]::IsNullOrWhiteSpace($geminiApiKey)) {
     throw "GEMINI_API_KEY fehlt."
 }
@@ -371,7 +407,10 @@ if ($null -eq $course) {
     throw "Kurs $CourseId wurde in Moodle Services nicht gefunden."
 }
 
-$materialsResponse = Invoke-MoodleApi -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Path "/api/courses/$CourseId/materials"
+$materialsResponse = Invoke-MoodleApiFirst -BaseUrl $moodleBaseUrl -ApiKey $moodleApiKey -Paths @(
+    "/api/courses/$CourseId/materials",
+    "/api/courses/$CourseId/resources"
+)
 $courseName = Repair-Text $course.fullname
 $courseShortName = Repair-Text $course.shortname
 $materialsForPrompt = Convert-MaterialsForPrompt $materialsResponse
