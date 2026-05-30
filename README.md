@@ -35,6 +35,8 @@ Die Struktur kommt aus `templates/lernplan-single-course.md`; Gemini fuellt nur 
 - `project.json`: UiPath Projektdefinition
 - `scripts/render_lernplan_email.ps1`: rendert Markdown zu HTML/PDF und versendet optional die HTML-Mail mit PDF-Anhaengen
 - `unterlagen/`: Prozess- und SDD-Unterlagen
+- `unterlagen/PROZESS_AUFZEICHNUNG.md`: Vorgabe und Checkliste fuer die vollstaendige Prozessaufzeichnung
+- `assets/aufzeichnungen/`: Ablageort fuer Videoaufnahmen und weitere Nachweise
 - `process/`: Prozessnotizen und Modellierung
 - `automation/`: weitere Automationsartefakte
 
