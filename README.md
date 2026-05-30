@@ -11,6 +11,7 @@ Private workspace fuer das FS26-RPA-Projekt.
 - Ausgabe: pro Kurs Markdown, HTML und PDF im Dokumente-Ordner
 - Abschluss-Mail: Lernplaene direkt als HTML im Mailbody, PDFs zusaetzlich als Anhang
 - Konfiguration: `.env` im Projekt-Root, siehe `.env.example`
+- Moodle-Zugangsdaten fuer den lokalen Moodle-API-Container: `MOODLE_USERNAME` und `MOODLE_PASSWORD` in `.env`
 - Mailversand: Gmail SMTP ueber `smtp.gmail.com`; `GMAIL_ADDRESS` wird als Login genutzt und standardmaessig als Plus-Adresse `name+uipath-moodle@gmail.com` verwendet
 - `SEND_EMAIL=false` ueberspringt den Mailversand und benoetigt keine Gmail-Werte
 - Beim Ausfuehren eines gepackten `.nupkg` kann `RPA_ENV_PATH` auf die lokale `.env` zeigen
