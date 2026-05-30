@@ -2,21 +2,40 @@
 
 Hier liegen die Nachweise fuer den vollstaendigen Prozessdurchlauf.
 
-## Erwartete Videodatei
+## Echte UiPath-Prozessaufnahme
 
 ```text
-rpa-prozessdurchlauf-YYYY-MM-DD.mp4
+rpa-uipath-robot-real-run-2026-05-30.mp4
 ```
 
-## Status
+Status: erstellt und geprueft.
 
-Eine secret-freie Walkthrough-Aufzeichnung aus den echten Nachweisbildern liegt vor:
+```text
+Datum: 2026-05-30
+Dauer: 03:00
+Gezeigter Kurs: 22576 / RPA
+Aufloesung: 1280x804
+```
+
+Die Aufnahme zeigt den realen UiPath-Roboterdurchlauf auf dem Windows-System:
+
+- UiPath-Projekt und Paketvorbereitung
+- Docker/Moodle-API-Pruefung ueber `/healthz`
+- Vorbereitung der Recording-Umgebung ohne sichtbare Secrets
+- Start des UiPath-Roboters ueber `UiRobot execute`
+- Moodle-Datenabruf, Gemini-Schritt und Ergebnisdatei
+- Abschluss mit `Robot Exit Code: 0`
+- Vorschau des erzeugten Markdown-Lernplans
+
+## Zusaetzliches Walkthrough-Video
+
+Eine secret-freie Walkthrough-Aufzeichnung aus den echten Nachweisbildern liegt zusaetzlich vor:
 
 ```text
 rpa-prozessdurchlauf-walkthrough-2026-05-30.mp4
 ```
 
-Diese Datei zeigt Architektur, Windows-Laufnachweis, generierten HTML-Lernplan und Moodle-Quellen. Sie ersetzt keine echte Live-Aufnahme der UiPath-Ausführung, ist aber als kompakter Prozessnachweis fuer Bericht und Präsentation nutzbar.
+Diese Datei zeigt Architektur, Windows-Laufnachweis, generierten HTML-Lernplan und Moodle-Quellen. Sie ist nur noch als kompakter Zusatznachweis fuer Bericht und Praesentation gedacht.
 
 ## Screenshot-Nachweise fuer Bericht und Praesentation
 
@@ -29,18 +48,7 @@ Die folgenden Bilder koennen direkt in die schriftliche Arbeit und in die Schlus
 | `lernplan-output-2026-05-30.png` | Screenshot des generierten HTML-Lernplans |
 | `moodle-sources-2026-05-30.png` | Screenshot der ausgewerteten Moodle-Quellen |
 
-Diese Screenshots ersetzen nicht die finale Prozessaufnahme. Das Bewertungsraster akzeptiert ein Video als Nachweis fuer den fehlerfreien Durchlauf; die Aufnahme muss daher noch ergaenzt werden.
-
-## Externe Ablage
-
-Falls die Videodatei zu gross fuer GitHub ist, wird sie extern abgelegt und hier verlinkt:
-
-```text
-Link: <noch offen>
-Datum: <noch offen>
-Dauer: <noch offen>
-Gezeigter Kurs: <noch offen>
-```
+Die Screenshots ergaenzen die echte Prozessaufnahme und koennen fuer Bericht und Schlussprasentation verwendet werden.
 
 ## Vor dem Hochladen pruefen
 
