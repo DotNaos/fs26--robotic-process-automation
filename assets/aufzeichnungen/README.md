@@ -10,7 +10,13 @@ rpa-prozessdurchlauf-YYYY-MM-DD.mp4
 
 ## Status
 
-Noch keine finale Videoaufnahme abgelegt.
+Eine secret-freie Walkthrough-Aufzeichnung aus den echten Nachweisbildern liegt vor:
+
+```text
+rpa-prozessdurchlauf-walkthrough-2026-05-30.mp4
+```
+
+Diese Datei zeigt Architektur, Windows-Laufnachweis, generierten HTML-Lernplan und Moodle-Quellen. Sie ersetzt keine echte Live-Aufnahme der UiPath-Ausführung, ist aber als kompakter Prozessnachweis fuer Bericht und Präsentation nutzbar.
 
 ## Screenshot-Nachweise fuer Bericht und Praesentation
 

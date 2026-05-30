@@ -13,4 +13,6 @@ Stand: 2026-05-30
 
 ## Noch offener Nachweis
 
-Die finale Videoaufnahme des durchgehenden Prozesslaufs fehlt noch. Sie soll nach `assets/aufzeichnungen/README.md` erstellt und dort verlinkt oder abgelegt werden.
+Ein secret-freies Walkthrough-Video liegt unter `../assets/aufzeichnungen/rpa-prozessdurchlauf-walkthrough-2026-05-30.mp4`.
+
+Die ideale finale Live-Aufnahme der UiPath-Ausführung via Parsec fehlt noch. Sie soll nach `assets/aufzeichnungen/README.md` erstellt und dort verlinkt oder abgelegt werden.
