@@ -10,7 +10,20 @@ rpa-prozessdurchlauf-YYYY-MM-DD.mp4
 
 ## Status
 
-Noch keine finale Aufnahme abgelegt.
+Noch keine finale Videoaufnahme abgelegt.
+
+## Screenshot-Nachweise fuer Bericht und Praesentation
+
+Die folgenden Bilder koennen direkt in die schriftliche Arbeit und in die Schlusspräsentation übernommen werden:
+
+| Datei | Zweck |
+| --- | --- |
+| `automation-architecture-2026-05-30.png` | Zielarchitektur der UiPath-Automatisierung |
+| `run-evidence-terminal-2026-05-30.png` | Nachweis des Windows-Laufs ohne sichtbare Secrets |
+| `lernplan-output-2026-05-30.png` | Screenshot des generierten HTML-Lernplans |
+| `moodle-sources-2026-05-30.png` | Screenshot der ausgewerteten Moodle-Quellen |
+
+Diese Screenshots ersetzen nicht die finale Prozessaufnahme. Das Bewertungsraster akzeptiert ein Video als Nachweis fuer den fehlerfreien Durchlauf; die Aufnahme muss daher noch ergaenzt werden.
 
 ## Externe Ablage
 
