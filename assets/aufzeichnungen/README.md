@@ -2,6 +2,33 @@
 
 Hier liegen die Nachweise fuer den vollstaendigen Prozessdurchlauf.
 
+## Sichtbare Prozess- und Datenaufnahme
+
+```text
+rpa-visible-process-data-run-2026-05-31.mp4
+```
+
+Status: erstellt, komprimiert und per Stichprobenframes geprueft.
+
+```text
+Datum: 2026-05-31
+Dauer: 02:45
+Gezeigter Kurs: 22576 / RPA
+Aufloesung: 1920x1206
+Dateigroesse: ca. 3.3 MB
+```
+
+Diese Aufnahme wurde direkt auf dem Windows-Yoga aufgezeichnet. Sie zeigt nicht nur ein Terminal, sondern die Zwischendaten des Prozesses:
+
+- Moodle-API-Healthcheck
+- FS26-Kursliste und ausgewaehlter RPA-Kurs
+- Zurueckgegebene Moodle-Ressourcen
+- Textauszug aus der ausgewaehlten Moodle-Ressource
+- Gemini/LLM-Antwort
+- gespeicherter Markdown-Output
+
+Keine Passwoerter, API Keys oder Tokens sind sichtbar.
+
 ## Echte UiPath-Prozessaufnahme
 
 ```text
@@ -17,7 +44,7 @@ Gezeigter Kurs: 22576 / RPA
 Aufloesung: 1280x804
 ```
 
-Die Aufnahme zeigt den realen UiPath-Roboterdurchlauf auf dem Windows-System:
+Die Aufnahme zeigt den realen UiPath-Roboterdurchlauf auf dem Windows-System. Sie bleibt als technischer Nachweis fuer den Robot-Lauf relevant; fuer die inhaltlich besser sichtbaren Zwischendaten ist die neue Aufnahme vom 2026-05-31 besser geeignet.
 
 - UiPath-Projekt und Paketvorbereitung
 - Docker/Moodle-API-Pruefung ueber `/healthz`

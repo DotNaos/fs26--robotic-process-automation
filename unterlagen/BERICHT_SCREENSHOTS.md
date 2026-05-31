@@ -1,12 +1,13 @@
 # Screenshot-Auswahl fuer Bericht und Schlusspräsentation
 
-Stand: 2026-05-30
+Stand: 2026-05-31
 
 ## Empfohlene Einbindung
 
 | Abschnitt | Video | Aussage |
 | --- | --- | --- |
-| Prozessdurchlauf / Abgabe | `../assets/aufzeichnungen/rpa-uipath-robot-real-run-2026-05-30.mp4` | Der echte UiPath-Roboterlauf wurde auf Windows aufgezeichnet und endet mit `Robot Exit Code: 0`. |
+| Prozessdurchlauf / Datenfluss | `../assets/aufzeichnungen/rpa-visible-process-data-run-2026-05-31.mp4` | Die Aufnahme zeigt den Prozess sichtbar auf dem Yoga: Moodle-API, Kursauswahl, Ressourcen, Textauszug, LLM-Antwort und gespeicherten Output. |
+| Technischer Robot-Nachweis | `../assets/aufzeichnungen/rpa-uipath-robot-real-run-2026-05-30.mp4` | Der echte UiPath-Roboterlauf wurde auf Windows aufgezeichnet und endet mit `Robot Exit Code: 0`. |
 
 | Abschnitt | Screenshot | Aussage |
 | --- | --- | --- |
@@ -19,4 +20,4 @@ Stand: 2026-05-30
 
 Ein secret-freies Walkthrough-Video liegt unter `../assets/aufzeichnungen/rpa-prozessdurchlauf-walkthrough-2026-05-30.mp4`.
 
-Dieses Walkthrough-Video bleibt als kompakte Ergaenzung nuetzlich. Die eigentliche Prozessaufnahme ist jetzt `../assets/aufzeichnungen/rpa-uipath-robot-real-run-2026-05-30.mp4`.
+Dieses Walkthrough-Video bleibt als kompakte Ergaenzung nuetzlich. Fuer die Abgabe ist die wichtigste Prozessaufnahme jetzt `../assets/aufzeichnungen/rpa-visible-process-data-run-2026-05-31.mp4`, weil dort die zurueckkommenden Daten und der LLM-Schritt sichtbar sind.
