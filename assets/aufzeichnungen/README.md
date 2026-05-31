@@ -5,27 +5,29 @@ Hier liegen die Nachweise fuer den vollstaendigen Prozessdurchlauf.
 ## Sichtbare Prozess- und Datenaufnahme
 
 ```text
-rpa-visible-process-data-run-2026-05-31.mp4
+rpa-visible-process-data-email-pdf-run-2026-05-31.mp4
 ```
 
 Status: erstellt, komprimiert und per Stichprobenframes geprueft.
 
 ```text
 Datum: 2026-05-31
-Dauer: 02:45
+Dauer: 03:35
 Gezeigter Kurs: 22576 / RPA
 Aufloesung: 1920x1206
-Dateigroesse: ca. 3.3 MB
+Dateigroesse: ca. 4.2 MB
 ```
 
-Diese Aufnahme wurde direkt auf dem Windows-Yoga aufgezeichnet. Sie zeigt nicht nur ein Terminal, sondern die Zwischendaten des Prozesses:
+Diese Aufnahme wurde direkt auf dem Windows-Yoga aufgezeichnet. Sie ersetzt die vorherige sichtbare Zwischenaufnahme. Sie zeigt nicht nur ein Terminal, sondern die Zwischendaten des Prozesses und das finale Ergebnis:
 
 - Moodle-API-Healthcheck
 - FS26-Kursliste und ausgewaehlter RPA-Kurs
 - Zurueckgegebene Moodle-Ressourcen
 - Textauszug aus der ausgewaehlten Moodle-Ressource
 - Gemini/LLM-Antwort
-- gespeicherter Markdown-Output
+- PDF-Rendering aus dem Lernplan
+- E-Mail-Schritt via Mailpit mit PDF-Anhang
+- das fertig gerenderte PDF am Ende der Aufnahme
 
 Keine Passwoerter, API Keys oder Tokens sind sichtbar.
 
