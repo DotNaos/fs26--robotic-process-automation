@@ -1,6 +1,6 @@
 # RPA Solution Design Document
 
-## Moodle Scraping
+## Moodle Lernplan
 
 ## Versionshistorie
 
@@ -8,26 +8,27 @@
 | --- | --- | --- | --- |
 | 0.1 | Florin Gartmann | Initiale Version | 07.04.2026 |
 | 0.2 | Michal Karczmarzyk | Grobe Prozessbeschreibung | 12.04.2026 |
+| 0.3 | Oliver Schütz | Screenshots Prozessschritte | 12.04.2026 |
 
 ## Verantwortlichkeiten
 
 | Rolle | Name |
 | --- | --- |
-| Projektleiter:in | Florin Gartmann |
-| Prozessverantwortliche:r | Oliver Schütz |
-| Teamleiter:in | Alessio De Icco |
-| Sachbearbeiter:in | Alessio De Icco |
-| RPA Entwickler:in | Michal Karczmarzyk |
-| RPA Business Analyst:in | `<Business Analyst>` |
+| Projektleiter | Florin Gartmann |
+| Prozessverantwortlicher | Oliver Schütz |
+| Teamleiter | Alessio De Icco |
+| Sachbearbeiter | Alessio De Icco |
+| RPA Entwickler | Michal Karczmarzyk |
+| RPA Business Analyst | Florin Gartmann |
 
 ## Dokumentenbewilligung
 
 | Name | Projektrolle | Datum der Überprüfung |
 | --- | --- | --- |
-| Florin Gartmann | Projektleiter:in | `<TT.MM.YYYY>` |
-| Oliver Schütz | Prozessverantwortliche:r | `<TT.MM.YYYY>` |
-| Alessio De Icco |  | `<TT.MM.YYYY>` |
-| Michal Karczmarzyk | RPA-Entwickler:in | `<TT.MM.YYYY>` |
+| Florin Gartmann | Projektleiter |  |
+| Oliver Schütz | Prozessverantwortlicher |  |
+| Alessio De Icco | Teamleiter |  |
+| Michal Karczmarzyk | RPA-Entwickler |  |
 
 ## Inhaltsverzeichnis
 
@@ -83,18 +84,14 @@ Der Prozess wird manuell durch den Klick auf eine Taste (User Trigger) in UiPath
 
 ## 4. Kernanwendungen
 
-`<Dieser Abschnitt dokumentiert die zu verwendenden Applikationen>.`
-
 | Anwendungsname | Umgebung | Beschreibung/Zugriff |
 | --- | --- | --- |
-| Moodle (FHGR) | Web-Browser | Primäre Datenquelle für Kursinhalte und Deadlines. |
-| ChatGPT (OpenAI API) | API | LLM zur Verarbeitung der Rohdaten und Erstellung des Lernplans. |
+| Moodle CLI / API (FHGR) | API / Kommandozeile | Primäre Datenquelle für Kursinhalte und Deadlines. |
+| Gemini (Gemini API) | API | LLM zur Verarbeitung der Rohdaten und Erstellung des Lernplans. |
 | UiPath Studio | Desktop | Entwicklungsumgebung und Execution Engine. |
 | JSON/Text File | Lokal | Zwischenspeicherung der extrahierten Kursdaten. |
 
 ### 4.1 Bekannte, für diesen Prozess relevante Releasewechsel
-
-`<Dieser Abschnitt dokumentiert alle geplanten und bekannten zukünftigen Software-Upgrades, neue Versionen oder Änderungen, die den automatisierten Prozess beeinflussen würden >.`
 
 | Anwendungsname & Version | Release Version | Release Datum | Kommentar |
 | --- | --- | --- | --- |
@@ -103,8 +100,6 @@ Der Prozess wird manuell durch den Klick auf eine Taste (User Trigger) in UiPath
 ## 5. Prozessbeschreibung und -design
 
 ### 5.1 Prozessübersicht
-
-`<Dieser Abschnitt zeigt den gesamten Prozess als Flowchart>.`
 
 ### 5.2 Prozessschritte
 
@@ -133,26 +128,6 @@ In der nachfolgenden Prozessbeschreibung gelten folgende Begrifflichkeiten:
 | 14 | **Rücksprung zur Kursprüfung**. Nach Report-Generierung oder Fehler-Logging springt der Prozess zurück zu Nächster Kurs. |  |
 | 15 | **NEIN: Abschluss-E-Mail schreiben**. Wenn keine weiteren Kurse vorhanden sind, wird die Abschluss-E-Mail erstellt und versendet. |  |
 | 16 | **ENDE**. Der Prozess wird beendet. |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
-|  | Schritt X - Beispiel. `XXXX` `XXXX` `XXXX` |  |
 
 ### 5.3 Exception Handling (Fehler, Ausnahmen und Pop up's)
 
@@ -186,7 +161,7 @@ Dieser Abschnitt beschreibt die Kriterien, anhand welcher der Roboter nach Ferti
 
 ### 7.1 Speicherung der Login Daten
 
-Die Logindaten, welche für die Applikationen und Systeme verwendet werden, werden … gespeichert.
+Die Logindaten, welche für die Applikationen und Systeme verwendet werden, werden lokal in `.env` beziehungsweise in UiPath-Konfigurationen gespeichert. Secrets, API Keys und Passwörter werden nicht in Git versioniert und in Nachweisvideos nicht sichtbar gemacht.
 
 ### 7.2 Risiken, Issues und Abhängigkeiten
 

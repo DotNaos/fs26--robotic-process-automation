@@ -41,4 +41,14 @@ Die Struktur kommt aus `templates/lernplan-single-course.md`; Gemini fuellt nur 
 - `process/`: Prozessnotizen und Modellierung
 - `automation/`: weitere Automationsartefakte
 
+## Abgabeunterlagen
+
+Die Moodle-Anforderungen fuer Kurs `22576` sind in `unterlagen/MOODLE_NOTIZEN.md` zusammengefasst. Die wichtigsten Abgabeartefakte liegen im Ordner `unterlagen/`:
+
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.docx`: schriftliche Gruppenarbeit / SDD
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.pdf`: gerenderte PDF-Fassung der schriftlichen Arbeit
+- `FHGR_PQD_Moodle Scraping.pptx`: Prozessqualifizierungs-/PQD-Praesentation
+- `Moodle-to-LLM Study Planner - Schlusspräsentation.pptx`: Schlussprasentation der UiPath-Loesung
+- `assets/aufzeichnungen/rpa-visible-process-data-email-pdf-run-2026-05-31.mp4`: sichtbarer Durchlauf mit Moodle-Daten, E-Mail-Schritt und finalem PDF
+
 Lokale Secrets gehoeren in `.env` oder in UiPath-Eingaben und werden nicht versioniert.

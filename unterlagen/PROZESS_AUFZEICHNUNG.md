@@ -75,12 +75,12 @@ Nach dem Aufnehmen werden diese Punkte ergaenzt:
 
 | Feld | Wert |
 | --- | --- |
-| Dateiname | `<noch offen>` |
-| Aufnahmedatum | `<noch offen>` |
-| Dauer | `<noch offen>` |
-| Verarbeiteter Kurs | `<noch offen>` |
-| Ergebnisdatei(en) | `<noch offen>` |
-| Ablageort oder Link | `<noch offen>` |
+| Dateiname | `rpa-visible-process-data-email-pdf-run-2026-05-31.mp4` |
+| Aufnahmedatum | `2026-05-31` |
+| Dauer | `03:35` |
+| Verarbeiteter Kurs | `22576 / Hyperautomation und Robotics Process Automation (RPA) / Process Automation & Mining` |
+| Ergebnisdatei(en) | Lernplan als Markdown, HTML, PDF und E-Mail-Nachweis mit PDF-Anhang |
+| Ablageort oder Link | `assets/aufzeichnungen/rpa-visible-process-data-email-pdf-run-2026-05-31.mp4` |
 
 ## Zeitindex
 
@@ -89,9 +89,12 @@ Nach der finalen Aufnahme wird hier ein kurzer Zeitindex eingetragen:
 | Zeit | Inhalt |
 | --- | --- |
 | 00:00 | Prozessstart |
-|  |  |
-|  |  |
-|  | Prozessende |
+| 00:20 | Moodle-API-Healthcheck und Kursauswahl |
+| 00:55 | Moodle-Ressourcen und Rueckgabedaten sichtbar |
+| 01:35 | LLM-Ergebnis und Lernplan-Zwischenergebnis sichtbar |
+| 02:05 | PDF- und E-Mail-Schritt |
+| 02:45 | Final gerendertes PDF sichtbar |
+| 03:35 | Prozessende |
 
 ## Bezug zum SDD
 
@@ -112,4 +115,3 @@ Die Aufnahme deckt die Prozessschritte aus Kapitel 5.2 des SDD ab:
 | PDF report generieren | Erzeugung der Zielausgabe |
 | Abschluss-E-Mail schreiben | Vorbereitung oder Versand der Abschluss-Mail |
 | ENDE | Sichtbares Prozessende |
-

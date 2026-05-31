@@ -1,6 +1,6 @@
 # Moodle Notizen
 
-Stand: 2026-04-12
+Stand: 2026-05-31
 
 ## Quelle
 
@@ -128,25 +128,51 @@ Wichtige Punkte fuer die Abgabe:
 - Automatisierbarkeit und Wirtschaftlichkeit sollen begruendet werden
 - Teilautomatisierung ist akzeptabel, wenn sie sinnvoll begruendet ist
 
+## Finale Moodle-Anforderungen
+
+Die Kursseite nennt fuer die Schlussphase `Vorbereitung Woche 3 (04./05.06.2026)` folgende relevanten Unterlagen:
+
+- `Aufgabe Schlusspräsentation UiPath Lösung` - Resource-ID `937565`
+- `Bewertungskriterien Schlusspräsentation UiPath Lösung` - Resource-ID `937567`
+- `Erarbeitung Abschlussarbeit` - Resource-ID `937568`
+- `Vorschlag Inhaltsverzeichnis` - Resource-ID `962091`
+
+Aus diesen Unterlagen ergeben sich fuer die Repo-Abgabe die folgenden Nachweise:
+
+- Schriftliche Gruppenarbeit / Dokumentation: Prozessauswahl, Prozessbeschreibung, technische und oekonomische Qualifizierung, Automatisierungsschritte, Herausforderungen, Chancen, Reflexion, Ausblick und Arbeitsaufteilung.
+- Schlussprasentation UiPath-Loesung: Prozessbeschreibung, spezifische Automatisierungsschritte, reflektierte Chancen/Herausforderungen, fehlerfreier Durchlauf als Video-Nachweis und formal passende Praesentation.
+- Prozessnachweis: Der Roboter beziehungsweise der sichtbare Durchlauf muss die Automatisierung nachvollziehbar und fehlerfrei zeigen. Laut Bewertungsraster reicht hier ein Video.
+
+## Aktuelle Abgabedateien im Repo
+
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.docx` - aktuelle Word-Fassung der schriftlichen Gruppenarbeit / SDD
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.pdf` - gerenderte PDF-Fassung der schriftlichen Gruppenarbeit
+- `FHGR_PQD_Moodle Scraping.pptx` - Prozessqualifizierungs-/PQD-Praesentation
+- `Moodle-to-LLM Study Planner - Schlusspräsentation.pptx` - Schlussprasentation der UiPath-Loesung
+- `../assets/aufzeichnungen/rpa-visible-process-data-email-pdf-run-2026-05-31.mp4` - sichtbarer Prozessdurchlauf mit Zwischendaten, E-Mail-Schritt und finalem PDF
+- `../assets/aufzeichnungen/rpa-uipath-robot-real-run-2026-05-30.mp4` - technischer Nachweis des echten UiPath-Roboterdurchlaufs
+
 ## Moodle-CLI Erkenntnisse
 
 In dieser Session wurde `moodle-cli` erfolgreich fuer folgende Aufgaben verwendet:
 
 - Kursliste lesen
 - Dateiliste eines Kurses lesen
+- Kursseite lesen
+- finale Kursunterlagen herunterladen
 
 Wichtige Beobachtungen:
 
 - Eine gueltige Moodle-Session ist notwendig.
-- `list courses` und `list files` funktionierten mit einer gueltigen Session.
-- Die aktuelle Build zeigte in dieser Session Probleme bei `print` und `download file`: statt der Dateioperation kam ein Fehler zu `calendar URL not set`.
-- Deshalb wurden einige Inhalte alternativ direkt ueber die gueltige Moodle-Session gelesen.
+- `list courses`, `list files`, `print course-page` und `download file` funktionierten mit einer gueltigen Session.
+- Office-Dateien sollten heruntergeladen und lokal geprueft werden. `moodle print course ...` kann bei `.docx`, `.pptx` und `.xlsx` Rohdaten ausgeben.
 
 ## Bereits bekannte lokale Projektdateien
 
-- SDD in Word: `/home/oli/projects/rpa/unterlagen/FHGR - UCXX (Moodle Scraping) - RPA SDD.docx`
+- SDD in Word: `unterlagen/FHGR - UCXX (Moodle Scraping) - RPA SDD.docx`
+- SDD als PDF: `unterlagen/FHGR - UCXX (Moodle Scraping) - RPA SDD.pdf`
 - Markdown-Transfer des SDD:
-  `/home/oli/projects/rpa/unterlagen/FHGR - UCXX (Moodle Scraping) - RPA SDD.md`
+  `unterlagen/FHGR - UCXX (Moodle Scraping) - RPA SDD.md`
 
 ## Zweck dieser Datei
 
