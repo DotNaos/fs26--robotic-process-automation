@@ -15,7 +15,7 @@ Datum: 2026-05-31
 Dauer: 03:35
 Gezeigter Kurs: 22576 / RPA
 Aufloesung: 1920x1206
-Dateigroesse: ca. 4.2 MB
+Dateigroesse: ca. 3.7 MB
 ```
 
 Diese Aufnahme wurde direkt auf dem Windows-Yoga aufgezeichnet. Sie ersetzt die vorherige sichtbare Zwischenaufnahme. Sie zeigt nicht nur ein Terminal, sondern die Zwischendaten des Prozesses und das finale Ergebnis:

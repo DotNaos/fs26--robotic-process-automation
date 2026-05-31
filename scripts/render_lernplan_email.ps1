@@ -42,6 +42,7 @@ function Convert-InlineMarkdown {
     param([string]$Text)
 
     $escaped = [System.Net.WebUtility]::HtmlEncode($Text)
+    $escaped = [regex]::Replace($escaped, '\[([^\]]+)\]\((https?://[^)\s]+)\)', '<a href="$2">$1</a>')
     $escaped = [regex]::Replace($escaped, '\*\*(.+?)\*\*', '<strong>$1</strong>')
     $escaped = [regex]::Replace($escaped, '\*(.+?)\*', '<em>$1</em>')
     $escaped = [regex]::Replace($escaped, '`([^`]+)`', '<code>$1</code>')
@@ -259,6 +260,7 @@ function New-FullHtmlDocument {
     p { margin: 8px 0 12px; }
     ul { margin: 8px 0 16px 24px; padding: 0; }
     li { margin: 5px 0; }
+    a { color: #0f766e; text-decoration: underline; }
     code { background: #eef2f7; border-radius: 4px; padding: 1px 4px; }
     pre { background: #f5f7fa; border: 1px solid #d9e2ec; border-radius: 6px; padding: 12px; white-space: pre-wrap; }
     .plan { page-break-after: always; }
@@ -302,7 +304,7 @@ function Convert-HtmlToPdf {
     }
 
     $htmlUri = ([Uri](Resolve-Path -LiteralPath $HtmlPath).Path).AbsoluteUri
-    $args = @("--headless=new", "--disable-gpu", "--disable-extensions", "--disable-default-apps", "--no-first-run", "--no-default-browser-check", "--print-to-pdf=$PdfPath", $htmlUri)
+    $args = @("--headless=new", "--disable-gpu", "--disable-extensions", "--disable-default-apps", "--no-first-run", "--no-default-browser-check", "--print-to-pdf-no-header", "--no-pdf-header-footer", "--print-to-pdf=$PdfPath", $htmlUri)
     $process = Start-Process -FilePath $BrowserPath -ArgumentList $args -Wait -PassThru -WindowStyle Hidden
 
     if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $PdfPath)) {
