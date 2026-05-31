@@ -72,6 +72,24 @@ Sämtliche Prozessschritte, welche in diesem Dokument nicht aufgeführt sind, si
 | SLA pro Fall | Sofort |
 | Anzahl automatisierbare Prozessstunden | 10 Stück * 15 Min. * 14 Wochen = 35h/Semester |
 
+## Business Case / Wirtschaftlichkeit
+
+Die Automatisierung ist wirtschaftlich sinnvoll, wenn sie nicht als einmaliger Studenten-Shortcut, sondern als wiederholbarer Lernmanagement-Prozess betrachtet wird. Die Rechnung ist bewusst konservativ und basiert auf den bereits dokumentierten Prozesskennzahlen.
+
+| Annahme | Wert | Herleitung | Bedeutung |
+| --- | --- | --- | --- |
+| Volumen | 140 Fälle / Semester | 10 Fälle pro Woche * 14 Wochen | typischer FS26-Betrachtungshorizont |
+| Manueller Aufwand | 35.0 Stunden | 140 Fälle * 15 Minuten | Suchen, Kopieren, Prompten und Prüfen ohne Bot |
+| Restaufwand nach Automatisierung | 4.7 Stunden | 140 Fälle * 2 Minuten Kontrolle | Starten, Ergebnis prüfen, Ausnahmefälle behandeln |
+| Netto-Zeitersparnis | 30.3 Stunden / Semester | 35.0h - 4.7h | realistischer Zeitgewinn nach menschlicher Prüfung |
+| Interner Stundensatz | CHF 40 / Stunde | konservative Annahme für studentische/administrative Bearbeitung | Basis für den monetären Vergleich |
+
+**Monetäre Wirkung:** Der manuelle Semesteraufwand entspricht ca. CHF 1'400. Nach Automatisierung verbleiben ca. CHF 187 Kontrollaufwand. Daraus ergibt sich eine erwartete Ersparnis von ca. CHF 1'213 pro Semester.
+
+**Kosten der Umsetzung:** Für die einmalige Entwicklung und Dokumentation wird konservativ mit ca. 35 Stunden gerechnet, also ca. CHF 1'400 bei CHF 40/h. Zusätzliche Toolkosten sind gering: UiPath Community/Studio im Ausbildungskontext, Docker lokal, Moodle API lokal und Gemini API im erwarteten Nutzungsumfang im einstelligen CHF-Bereich pro Semester. Laufende Wartung wird mit ca. 2 Stunden pro Semester angesetzt.
+
+**ROI-Einschätzung:** Bei nur einem einzelnen Studentenprozess amortisiert sich der Aufbau ungefähr nach 1.2 Semestern. Wird der Prozess für mehrere Studierende, mehrere Kurse oder wiederkehrende Studiengänge verwendet, sinkt die Amortisationszeit deutlich. Der qualitative Nutzen besteht zusätzlich in weniger Copy/Paste-Fehlern, reproduzierbarer Quellenlage und besser nachvollziehbaren Lernplan-Ergebnissen.
+
 ## 3. Prozessauslöser
 
 ### 3.1 Aktueller Prozessauslöser
