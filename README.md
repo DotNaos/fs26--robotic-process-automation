@@ -16,6 +16,34 @@ Private workspace fuer das FS26-RPA-Projekt.
 - `SEND_EMAIL=false` ueberspringt den Mailversand und benoetigt keine Gmail-Werte
 - Beim Ausfuehren eines gepackten `.nupkg` kann `RPA_ENV_PATH` auf die lokale `.env` zeigen
 
+## Lokale Docker-Services
+
+Die Moodle Services API kann lokal per Docker Compose gestartet werden:
+
+```powershell
+docker compose up -d moodle-api
+```
+
+Danach muss die lokale `.env` im Projekt-Root auf den lokalen Service zeigen:
+
+```text
+MOODLE_BASE_URL=http://127.0.0.1:8080
+```
+
+Der Healthcheck prueft, ob der lokale Service erreichbar ist:
+
+```powershell
+Invoke-RestMethod -Headers @{"X-Moodle-App-Key"=$env:MOODLE_API_KEY} -Uri "http://127.0.0.1:8080/healthz"
+```
+
+Fuer lokale Mail-Tests kann zusaetzlich Mailpit gestartet werden:
+
+```powershell
+docker compose up -d mailpit
+```
+
+Mailpit ist danach unter `http://127.0.0.1:8025` sichtbar. In `.env` koennen dafuer `SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025` und `SMTP_ENABLE_SSL=false` gesetzt werden.
+
 ## Ein-Kurs-Iteration
 
 Zum Iterieren an Ton und Struktur kann zuerst nur ein Markdown-Lernplan fuer einen Kurs erzeugt werden:

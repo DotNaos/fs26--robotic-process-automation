@@ -1,0 +1,22 @@
+name: fs26-rpa
+
+services:
+  moodle-api:
+    image: ghcr.io/dotnaos/moodle-cli:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MOODLE_USERNAME: ${MOODLE_USERNAME:?Set MOODLE_USERNAME in .env}
+      MOODLE_PASSWORD: ${MOODLE_PASSWORD:?Set MOODLE_PASSWORD in .env}
+      MOODLE_API_KEY: ${MOODLE_API_KEY:-local-dev}
+    command: ["serve", "--addr", ":8080"]
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
