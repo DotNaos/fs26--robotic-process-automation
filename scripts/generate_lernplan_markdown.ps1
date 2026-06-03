@@ -88,7 +88,17 @@ function Invoke-MoodleApi {
     )
 
     $headers = @{ "X-Moodle-App-Key" = $ApiKey }
-    return Invoke-RestMethod -Headers $headers -Uri ($BaseUrl.TrimEnd("/") + $Path) -TimeoutSec 60
+    $base = $BaseUrl.TrimEnd("/")
+    try {
+        return Invoke-RestMethod -Headers $headers -Uri ($base + $Path) -TimeoutSec 60
+    } catch {
+        $statusCode = try { [int]$_.Exception.Response.StatusCode } catch { 0 }
+        if ($statusCode -eq 404 -and $Path -match "/materials") {
+            $resourcePath = $Path -replace "/materials", "/resources"
+            return Invoke-RestMethod -Headers $headers -Uri ($base + $resourcePath) -TimeoutSec 60
+        }
+        throw
+    }
 }
 
 function Get-ResponseArray {
