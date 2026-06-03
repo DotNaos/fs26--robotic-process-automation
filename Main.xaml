@@ -149,7 +149,7 @@
             <OutArgument x:TypeArguments="x:String">[MoodleApiKey]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("MOODLE_API_KEY") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("MOODLE_API_KEY")), EnvConfig("MOODLE_API_KEY"), System.IO.File.ReadAllText("__missing_env_MOODLE_API_KEY__"))]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("MOODLE_API_KEY"), EnvConfig("MOODLE_API_KEY"), "")]</InArgument>
           </Assign.Value>
         </Assign>
         <Assign DisplayName="Gemini API Key aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg2">
@@ -249,12 +249,12 @@
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <Assign DisplayName="Remote Moodle API pruefen (GET /api/me)" sap2010:WorkflowViewState.IdRef="Assign_Docker">
+            <Assign DisplayName="Moodle API pruefen (GET /healthz)" sap2010:WorkflowViewState.IdRef="Assign_Docker">
               <Assign.To>
                 <OutArgument x:TypeArguments="x:String">[KursListeJson]</OutArgument>
               </Assign.To>
               <Assign.Value>
-                <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/me")]</InArgument>
+                <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/healthz")]</InArgument>
               </Assign.Value>
             </Assign>
             <Delay DisplayName="Kurze Pause nach API-Check" Duration="[System.TimeSpan.FromSeconds(1)]" sap2010:WorkflowViewState.IdRef="Delay_1" />
@@ -288,7 +288,7 @@
                     <OutArgument x:TypeArguments="scg:List(x:String)">[KursListe]</OutArgument>
                   </Assign.To>
                   <Assign.Value>
-                    <InArgument x:TypeArguments="scg:List(x:String)">[JObject.Parse(KursListeJson)("courses").Where(Function(tok) (tok("shortname") IsNot Nothing AndAlso tok("shortname").ToString().Contains(SemesterFilter)) OrElse (tok("fullname") IsNot Nothing AndAlso tok("fullname").ToString().Contains(SemesterFilter))).Select(Function(tok) tok("id").ToString()).ToList()]</InArgument>
+                    <InArgument x:TypeArguments="scg:List(x:String)">[If(JToken.Parse(KursListeJson).Type = JTokenType.Array, JToken.Parse(KursListeJson), JObject.Parse(KursListeJson)("courses")).Where(Function(tok) (tok("shortname") IsNot Nothing AndAlso tok("shortname").ToString().Contains(SemesterFilter)) OrElse (tok("fullname") IsNot Nothing AndAlso tok("fullname").ToString().Contains(SemesterFilter))).Select(Function(tok) tok("id").ToString()).ToList()]</InArgument>
                   </Assign.Value>
                 </Assign>
                 <Assign DisplayName="Kursindex initialisieren" sap2010:WorkflowViewState.IdRef="Assign_2">
@@ -342,12 +342,12 @@
                             <InArgument x:TypeArguments="x:Int32">0</InArgument>
                           </Assign.Value>
                         </Assign>
-                        <Assign DisplayName="Kurs-Details via API laden (GET /api/courses/{id}/materials)" sap2010:WorkflowViewState.IdRef="Assign_KursDetails">
+                        <Assign DisplayName="Kurs-Details via API laden (GET /api/courses/{id}/resources)" sap2010:WorkflowViewState.IdRef="Assign_KursDetails">
                           <Assign.To>
                             <OutArgument x:TypeArguments="x:String">[KursDetails]</OutArgument>
                           </Assign.To>
                           <Assign.Value>
-                            <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/materials")]</InArgument>
+                            <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources")]</InArgument>
                           </Assign.Value>
                         </Assign>
                         <WriteLine DisplayName="[Process Transaction] Kurs-Details geladen" sap2010:WorkflowViewState.IdRef="WriteLine_4" Text="[&quot;[Process Transaction] Kurs-Details für Kurs-ID &quot; &amp; AktuellerKursID &amp; &quot; geladen (&quot; &amp; KursDetails.Length.ToString() &amp; &quot; Zeichen).&quot;]" />
@@ -367,12 +367,12 @@
                                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                               </scg:Dictionary>
                             </sap:WorkflowViewStateService.ViewState>
-                            <Assign DisplayName="Kurs-Materialien abrufen (GET /api/courses/{id}/materials)" sap2010:WorkflowViewState.IdRef="Assign_GetResources">
+                            <Assign DisplayName="Kurs-Materialien abrufen (GET /api/courses/{id}/resources)" sap2010:WorkflowViewState.IdRef="Assign_GetResources">
                               <Assign.To>
                                 <OutArgument x:TypeArguments="x:String">[SemesterInfoPDF]</OutArgument>
                               </Assign.To>
                               <Assign.Value>
-                                <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/materials")]</InArgument>
+                                <InArgument x:TypeArguments="x:String">[(New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources")]</InArgument>
                               </Assign.Value>
                             </Assign>
                             <Assign DisplayName="Semesterinfo-PDF Resource-ID herausfiltern" sap2010:WorkflowViewState.IdRef="Assign_FindPDF">
@@ -380,7 +380,7 @@
                                 <OutArgument x:TypeArguments="x:String">[SemesterInfoResourceId]</OutArgument>
                               </Assign.To>
                               <Assign.Value>
-                                <InArgument x:TypeArguments="x:String">[If(JObject.Parse(SemesterInfoPDF)("materials").Where(Function(tok) tok("name") IsNot Nothing AndAlso Regex.IsMatch(tok("name").ToString(), "semester", RegexOptions.IgnoreCase)).Select(Function(tok) tok("id").ToString()).FirstOrDefault(), "")]</InArgument>
+                                <InArgument x:TypeArguments="x:String">[If(JToken.Parse(SemesterInfoPDF).Type = JTokenType.Array, JToken.Parse(SemesterInfoPDF), If(JObject.Parse(SemesterInfoPDF)("materials") IsNot Nothing, JObject.Parse(SemesterInfoPDF)("materials"), JObject.Parse(SemesterInfoPDF)("resources"))).Where(Function(tok) tok("name") IsNot Nothing AndAlso Regex.IsMatch(tok("name").ToString(), "semester|modulbeschreibung|beurteilung|bewertung", RegexOptions.IgnoreCase)).Select(Function(tok) tok("id").ToString()).FirstOrDefault()]</InArgument>
                               </Assign.Value>
                             </Assign>
                             <WriteLine DisplayName="[Process Transaction] Semesterinfo-PDF Resource-ID" sap2010:WorkflowViewState.IdRef="WriteLine_5" Text="[&quot;[Process Transaction] Semesterinfo PDF Resource-ID: &quot; &amp; If(String.IsNullOrEmpty(SemesterInfoResourceId), &quot;[nicht gefunden]&quot;, SemesterInfoResourceId)]" />
@@ -400,12 +400,12 @@
                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                   </scg:Dictionary>
                                 </sap:WorkflowViewStateService.ViewState>
-                                <Assign DisplayName="Semesterinfo via API laden (GET /api/courses/{id}/materials/{resourceId}/text)" sap2010:WorkflowViewState.IdRef="Assign_SemInfo">
+                                <Assign DisplayName="Semesterinfo via API laden (GET /api/courses/{id}/resources/{resourceId}/text)" sap2010:WorkflowViewState.IdRef="Assign_SemInfo">
                                   <Assign.To>
                                     <OutArgument x:TypeArguments="x:String">[SemesterInfo]</OutArgument>
                                   </Assign.To>
                                   <Assign.Value>
-                                    <InArgument x:TypeArguments="x:String">[If(String.IsNullOrEmpty(SemesterInfoResourceId), "[Semesterinfo nicht gefunden]", JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/materials/" &amp; SemesterInfoResourceId &amp; "/text"))("document")("text").ToString())]</InArgument>
+                                    <InArgument x:TypeArguments="x:String">[If(String.IsNullOrEmpty(SemesterInfoResourceId), "[Semesterinfo nicht gefunden]", If(JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("document") IsNot Nothing, JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("document")("text").ToString(), JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("text").ToString()))]</InArgument>
                                   </Assign.Value>
                                 </Assign>
                                 <WriteLine DisplayName="[Process Transaction] Semesterinfo gescraped" sap2010:WorkflowViewState.IdRef="WriteLine_6" Text="[&quot;[Process Transaction] Semesterinfo für Kurs &quot; &amp; AktuellerKursID &amp; &quot; gescraped (&quot; &amp; SemesterInfo.Length.ToString() &amp; &quot; Zeichen).&quot;]" />

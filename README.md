@@ -11,6 +11,7 @@ Private workspace fuer das FS26-RPA-Projekt.
 - Ausgabe: pro Kurs Markdown, HTML und PDF im Dokumente-Ordner
 - Abschluss-Mail: Lernplaene direkt als HTML im Mailbody, PDFs zusaetzlich als Anhang
 - Konfiguration: `.env` im Projekt-Root, siehe `.env.example`
+- Moodle-Zugangsdaten fuer den lokalen Moodle-API-Container: `MOODLE_USERNAME` und `MOODLE_PASSWORD` in `.env`
 - Mailversand: Gmail SMTP ueber `smtp.gmail.com`; `GMAIL_ADDRESS` wird als Login genutzt und standardmaessig als Plus-Adresse `name+uipath-moodle@gmail.com` verwendet
 - `SEND_EMAIL=false` ueberspringt den Mailversand und benoetigt keine Gmail-Werte
 - Beim Ausfuehren eines gepackten `.nupkg` kann `RPA_ENV_PATH` auf die lokale `.env` zeigen
@@ -35,7 +36,19 @@ Die Struktur kommt aus `templates/lernplan-single-course.md`; Gemini fuellt nur 
 - `project.json`: UiPath Projektdefinition
 - `scripts/render_lernplan_email.ps1`: rendert Markdown zu HTML/PDF und versendet optional die HTML-Mail mit PDF-Anhaengen
 - `unterlagen/`: Prozess- und SDD-Unterlagen
+- `unterlagen/PROZESS_AUFZEICHNUNG.md`: Vorgabe und Checkliste fuer die vollstaendige Prozessaufzeichnung
+- `assets/aufzeichnungen/`: Ablageort fuer Videoaufnahmen und weitere Nachweise
 - `process/`: Prozessnotizen und Modellierung
 - `automation/`: weitere Automationsartefakte
+
+## Abgabeunterlagen
+
+Die Moodle-Anforderungen fuer Kurs `22576` sind in `unterlagen/MOODLE_NOTIZEN.md` zusammengefasst. Die wichtigsten Abgabeartefakte liegen im Ordner `unterlagen/`:
+
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.docx`: schriftliche Gruppenarbeit / SDD
+- `FHGR - UCXX (Moodle Scraping) - RPA SDD.pdf`: gerenderte PDF-Fassung der schriftlichen Arbeit
+- `FHGR_PQD_Moodle Scraping.pptx`: Prozessqualifizierungs-/PQD-Praesentation
+- `Moodle-to-LLM Study Planner - Schlusspräsentation.pptx`: Schlussprasentation der UiPath-Loesung
+- `assets/aufzeichnungen/rpa-visible-process-data-email-pdf-run-2026-05-31.mp4`: sichtbarer Durchlauf mit Moodle-Daten, E-Mail-Schritt und finalem PDF
 
 Lokale Secrets gehoeren in `.env` oder in UiPath-Eingaben und werden nicht versioniert.
