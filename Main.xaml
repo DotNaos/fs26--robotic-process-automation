@@ -400,12 +400,12 @@
                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                   </scg:Dictionary>
                                 </sap:WorkflowViewStateService.ViewState>
-                                <Assign DisplayName="Semesterinfo via API laden (GET /api/courses/{id}/resources/{resourceId}/text)" sap2010:WorkflowViewState.IdRef="Assign_SemInfo">
+                                <Assign DisplayName="Semesterinfo-Kontext vorbereiten (Text optional)" sap2010:WorkflowViewState.IdRef="Assign_SemInfo">
                                   <Assign.To>
                                     <OutArgument x:TypeArguments="x:String">[SemesterInfo]</OutArgument>
                                   </Assign.To>
                                   <Assign.Value>
-                                    <InArgument x:TypeArguments="x:String">[If(String.IsNullOrEmpty(SemesterInfoResourceId), "[Semesterinfo nicht gefunden]", If(JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("document") IsNot Nothing, JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("document")("text").ToString(), JObject.Parse((New System.Net.WebClient() With {.Headers = New System.Net.WebHeaderCollection() From {{"X-Moodle-App-Key", MoodleApiKey}}}).DownloadString(MoodleBaseUrl &amp; "/api/courses/" &amp; AktuellerKursID &amp; "/resources/" &amp; SemesterInfoResourceId &amp; "/text"))("text").ToString()))]</InArgument>
+                                    <InArgument x:TypeArguments="x:String">[If(String.IsNullOrEmpty(SemesterInfoResourceId), "[Semesterinfo nicht gefunden. Verwende die Kursdetails und Ressourcenliste.]", "[Semesterinfo-Resource gefunden: " &amp; SemesterInfoResourceId &amp; ". Kein separater Textauszug erforderlich; relevante Ressourcen sind in den Kursdetails enthalten.]")]</InArgument>
                                   </Assign.Value>
                                 </Assign>
                                 <WriteLine DisplayName="[Process Transaction] Semesterinfo gescraped" sap2010:WorkflowViewState.IdRef="WriteLine_6" Text="[&quot;[Process Transaction] Semesterinfo für Kurs &quot; &amp; AktuellerKursID &amp; &quot; gescraped (&quot; &amp; SemesterInfo.Length.ToString() &amp; &quot; Zeichen).&quot;]" />
