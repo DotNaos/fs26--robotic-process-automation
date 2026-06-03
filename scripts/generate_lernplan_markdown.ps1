@@ -91,20 +91,41 @@ function Invoke-MoodleApi {
     return Invoke-RestMethod -Headers $headers -Uri ($BaseUrl.TrimEnd("/") + $Path) -TimeoutSec 60
 }
 
+function Get-ResponseArray {
+    param(
+        [object]$Response,
+        [string]$PropertyName
+    )
+
+    if ($null -eq $Response) {
+        return @()
+    }
+    if ($Response -is [System.Array]) {
+        return @($Response)
+    }
+
+    $property = $Response.PSObject.Properties[$PropertyName]
+    if ($null -ne $property -and $null -ne $property.Value) {
+        return @($property.Value)
+    }
+
+    return @($Response)
+}
+
 function Select-Course {
     param(
         [object]$CoursesResponse,
         [string]$CourseId
     )
 
-    $courses = if ($CoursesResponse.courses) { $CoursesResponse.courses } else { $CoursesResponse }
+    $courses = Get-ResponseArray -Response $CoursesResponse -PropertyName "courses"
     return $courses | Where-Object { [string]$_.id -eq [string]$CourseId } | Select-Object -First 1
 }
 
 function Convert-MaterialsForPrompt {
     param([object]$MaterialsResponse)
 
-    $materials = if ($MaterialsResponse.materials) { $MaterialsResponse.materials } else { $MaterialsResponse }
+    $materials = Get-ResponseArray -Response $MaterialsResponse -PropertyName "materials"
     $rows = @()
     foreach ($material in $materials) {
         $name = Repair-Text $material.name
@@ -206,7 +227,7 @@ function Read-OpenXmlText {
 function Select-SourceMaterials {
     param([object]$MaterialsResponse)
 
-    $materials = if ($MaterialsResponse.materials) { $MaterialsResponse.materials } else { $MaterialsResponse }
+    $materials = Get-ResponseArray -Response $MaterialsResponse -PropertyName "materials"
     $sourcePattern = 'Vorbereitung Block 3|Aufgabe.*Schluss|Bewertungskriterien|Erarbeitung Abschlussarbeit|Vorschlag Inhaltsverzeichnis|Beurteilungsraster|Abgabe Abschlussarbeit|Abgabe Schlussarbeit'
     return @(
         $materials |
