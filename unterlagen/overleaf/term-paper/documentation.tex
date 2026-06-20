@@ -30,6 +30,33 @@ Im vorliegenden Projekt wird RPA erweitert: Der Bot führt nicht bloss Klick- un
 \subsection{Beschreibung des Prozesses }
 Der Ist-Prozess beginnt mit der manuellen Suche in Moodle. Studierende öffnen Kursseiten, identifizieren relevante Dokumente, suchen Semesterinformationen, kopieren Inhalte und formulieren daraus Prompts für ein LLM. Der Soll-Prozess startet per User-Trigger in UiPath. Danach werden Konfiguration und Zugangsdaten geladen, Moodle-Kurse ausgelesen, nach Semester gefiltert, Kursinformationen und Semester-PDFs verarbeitet, Rohdaten bereinigt, an Gemini übergeben, validiert und als Lernplan gespeichert.
 
+\subsection{Manuelle Durchführung als Referenzprozess}
+Vor der Automatisierung musste der Ablauf manuell in Moodle durchgeführt werden. Dazu gehörten das Öffnen des passenden Kurses, das Durchsuchen der bereitgestellten Materialien, das Erkennen relevanter Abgaben und Fristen sowie das anschliessende Strukturieren der Informationen zu einem Lernplan. Die folgenden Screenshots zeigen exemplarisch diesen manuellen Referenzprozess, den die Automatisierung fachlich ersetzt.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/manual-process/01-moodle-kursstart.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/manual-process/02-kursmaterialien.png}
+\end{minipage}
+
+\vspace{0.45cm}
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/manual-process/03-abgabe-und-deadline.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=0.78\textwidth]{images/manual-process/04-generierter-lernplan.png}
+\end{minipage}
+\caption{Screenshots des manuellen Referenzprozesses und des Zielergebnisses}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \resizebox{0.96\textwidth}{!}{%
