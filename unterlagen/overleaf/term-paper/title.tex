@@ -1,0 +1,23 @@
+% !TEX root = documentation.tex
+
+
+\titlehead{BSc Computational and Data Science\\CDS-309 Hyperautomation und RPA\\Dozenten: Markus Müntener, Matthias Müller\hfill}
+\title{Automatisierung eines Moodle-basierten Lernplanungsprozesses mit UiPath und generativer KI}
+\author[1,*]{Alessio De Icco}
+\author[2,*]{Florin Gartmann}
+\author[3,*]{Michal Karczmarzyk}
+\author[4,*]{Oliver Schütz}
+\affil[1]{Fachhochschule Graubünden}
+\affil[*]{E-Mail Adressen: michal.karczmarzyk@stud.fhgr.ch, oliver.schuetz@stud.fhgr.ch, alessio.deicco@stud.fhgr.ch, florin.gartmann@stud.fhgr.ch}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+Diese Arbeit untersucht die Automatisierung eines Moodle-basierten Lernplanungsprozesses mit UiPath, Moodle-Datenzugriff und generativer KI. Ausgangspunkt ist das Problem, dass Studierende Kursinformationen, Aufgaben, Deadlines und Semesterunterlagen häufig manuell in verschiedenen Moodle-Kursen suchen und anschliessend für die Erstellung eines Lernplans aufbereiten müssen.
+
+Ziel des Moodle-to-LLM Study Planners ist es, diese wiederkehrenden Arbeitsschritte zu automatisieren. UiPath steuert den Prozess, liest relevante Moodle-Informationen aus, speichert sie strukturiert zwischen und übergibt sie an die Gemini API, die daraus einen Lernplan erstellt. Damit verbindet die Lösung klassische RPA mit API-Nutzung und GenAI zu einem Hyperautomation-Ansatz.
+
+Die Analyse zeigt, dass der Prozess technisch gut automatisierbar ist, da er digital, wiederholbar und datengetrieben abläuft. Herausforderungen bestehen vor allem in uneinheitlichen Moodle-Strukturen, unterschiedlichen PDF-Formaten, API-Fehlern und der Validierung von LLM-Antworten. Durch strukturierte Datenverarbeitung, Logging und Retry-Mechanismen können diese Risiken reduziert werden. Insgesamt zeigt die Arbeit, dass der gewählte Prozess sowohl fachlich relevant als auch technisch und ökonomisch für eine RPA-Automatisierung geeignet ist.
+\end{abstract}
+
+\clearpage
