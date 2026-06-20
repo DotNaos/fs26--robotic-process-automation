@@ -12,7 +12,7 @@ Private workspace fuer das FS26-RPA-Projekt.
 - Abschluss-Mail: Lernplaene direkt als HTML im Mailbody, PDFs zusaetzlich als Anhang
 - Konfiguration: `.env` im Projekt-Root, siehe `.env.example`
 - Moodle-Zugangsdaten fuer den lokalen Moodle-API-Container: `MOODLE_USERNAME` und `MOODLE_PASSWORD` in `.env`
-- Mailversand: Gmail SMTP ueber `smtp.gmail.com`; `GMAIL_ADDRESS` wird als Login genutzt und standardmaessig als Plus-Adresse `name+uipath-moodle@gmail.com` verwendet
+- Mailversand: Gmail SMTP ueber `smtp.gmail.com`; `GMAIL_ADDRESS` wird als Login genutzt. `SMTP_FROM_ADDRESS` kann gesetzt werden, wenn der Absender exakt festgelegt werden soll.
 - `SEND_EMAIL=false` ueberspringt den Mailversand und benoetigt keine Gmail-Werte
 - Beim Ausfuehren eines gepackten `.nupkg` kann `RPA_ENV_PATH` auf die lokale `.env` zeigen
 
@@ -28,7 +28,10 @@ Danach muss die lokale `.env` im Projekt-Root auf den lokalen Service zeigen:
 
 ```text
 MOODLE_BASE_URL=http://127.0.0.1:8080
+COURSE_FILTER=22576
 ```
+
+`COURSE_FILTER` ist optional. Wenn es gesetzt ist, verarbeitet UiPath nur diese Kurs-ID und der Renderer nimmt nur den neuesten Lernplan fuer diesen Kurs. Dadurch werden alte Markdown-Dateien im Dokumente-Ordner nicht versehentlich erneut als PDF/E-Mail gerendert.
 
 Der Healthcheck prueft, ob der lokale Service erreichbar ist:
 

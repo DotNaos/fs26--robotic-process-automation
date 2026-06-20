@@ -84,7 +84,7 @@
       <Variable x:TypeArguments="x:String" Default="[&quot;FS26&quot;]" Name="SemesterFilter" />
       <Variable x:TypeArguments="x:String" Name="GeminiApiKey" />
       <Variable x:TypeArguments="x:String" Name="MoodleApiKey" />
-      <Variable x:TypeArguments="x:String" Default="[&quot;gemma-4-31b-it&quot;]" Name="GeminiModel" />
+      <Variable x:TypeArguments="x:String" Default="[&quot;gemini-flash-latest&quot;]" Name="GeminiModel" />
       <Variable x:TypeArguments="x:String" Name="EnvFilePath" />
       <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Default="[New Dictionary(Of String, String)()]" Name="EnvConfig" />
       <Variable x:TypeArguments="x:Boolean" Default="[False]" Name="SendEmail" />
@@ -102,6 +102,7 @@
       <Variable x:TypeArguments="x:String" Name="SmtpFromAddress" />
       <Variable x:TypeArguments="x:String" Name="SmtpPassword" />
       <Variable x:TypeArguments="x:Object" Name="SmtpCallResult" />
+      <Variable x:TypeArguments="x:String" Default="[&quot;&quot;]" Name="CourseFilter" />
     </Flowchart.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -133,7 +134,7 @@
             <OutArgument x:TypeArguments="x:String">[EnvFilePath]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[If(Not String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("RPA_ENV_PATH")) AndAlso System.IO.File.Exists(Environment.GetEnvironmentVariable("RPA_ENV_PATH")), Environment.GetEnvironmentVariable("RPA_ENV_PATH"), If(System.IO.File.Exists(System.IO.Path.Combine(Environment.CurrentDirectory, ".env")), System.IO.Path.Combine(Environment.CurrentDirectory, ".env"), System.IO.File.ReadAllText("__missing_.env_or_RPA_ENV_PATH__")))]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(System.IO.File.Exists("C:\Users\schue\projects\fs26-rpa-local-docker\.env"), "C:\Users\schue\projects\fs26-rpa-local-docker\.env", If(Not String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("RPA_ENV_PATH")) AndAlso System.IO.File.Exists(Environment.GetEnvironmentVariable("RPA_ENV_PATH")), Environment.GetEnvironmentVariable("RPA_ENV_PATH"), If(System.IO.File.Exists(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "projects", "fs26-rpa-local-docker", ".env")), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "projects", "fs26-rpa-local-docker", ".env"), If(System.IO.File.Exists(System.IO.Path.Combine(Environment.CurrentDirectory, ".env")), System.IO.Path.Combine(Environment.CurrentDirectory, ".env"), System.IO.File.ReadAllText("__missing_.env_or_RPA_ENV_PATH__")))))]</InArgument>
           </Assign.Value>
         </Assign>
         <Assign DisplayName=".env laden" sap2010:WorkflowViewState.IdRef="Assign_Cfg0b">
@@ -189,7 +190,7 @@
             <OutArgument x:TypeArguments="x:String">[SmtpFromAddress]</OutArgument>
           </Assign.To>
           <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("SMTP_FROM_ADDRESS") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("SMTP_FROM_ADDRESS")), EnvConfig("SMTP_FROM_ADDRESS"), If(SmtpUsername.ToLower().EndsWith("@gmail.com"), SmtpUsername.Substring(0, SmtpUsername.Length - "@gmail.com".Length) &amp; "+uipath-moodle@gmail.com", SmtpUsername))]</InArgument>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("SMTP_FROM_ADDRESS") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("SMTP_FROM_ADDRESS")), EnvConfig("SMTP_FROM_ADDRESS"), SmtpUsername)]</InArgument>
           </Assign.Value>
         </Assign>
         <Assign DisplayName="Gmail App-Passwort aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6">
@@ -206,6 +207,14 @@
           </Assign.To>
           <Assign.Value>
             <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("SEMESTER_FILTER") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("SEMESTER_FILTER")), EnvConfig("SEMESTER_FILTER"), SemesterFilter)]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <Assign DisplayName="Kursfilter optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6bCourse">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[CourseFilter]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[If(EnvConfig.ContainsKey("COURSE_FILTER") AndAlso Not String.IsNullOrWhiteSpace(EnvConfig("COURSE_FILTER")), EnvConfig("COURSE_FILTER"), "")]</InArgument>
           </Assign.Value>
         </Assign>
         <Assign DisplayName="Gemini Modell optional aus .env" sap2010:WorkflowViewState.IdRef="Assign_Cfg6c">
@@ -232,7 +241,8 @@
             <InArgument x:TypeArguments="x:String">[System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Lernplan_" &amp; SemesterFilter &amp; ".md")]</InArgument>
           </Assign.Value>
         </Assign>
-        <WriteLine DisplayName="[Init] Config und API-Keys geladen" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;[Initialisierung] Config geladen. Moodle API: &quot; &amp; MoodleBaseUrl &amp; &quot; | Semester: &quot; &amp; SemesterFilter &amp; &quot; | Modell: &quot; &amp; GeminiModel]" />
+        <WriteLine DisplayName="[Init] Config und API-Keys geladen" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;[Initialisierung] Config geladen aus: &quot; &amp; EnvFilePath &amp; &quot; | Moodle API: &quot; &amp; MoodleBaseUrl &amp; &quot; | Semester: &quot; &amp; SemesterFilter &amp; If(String.IsNullOrWhiteSpace(CourseFilter), &quot;&quot;, &quot; | Kursfilter: &quot; &amp; CourseFilter) &amp; &quot; | Modell: &quot; &amp; GeminiModel]" />
+        <WriteLine DisplayName="[Init] E-Mail Konfiguration anzeigen" sap2010:WorkflowViewState.IdRef="WriteLine_EmailConfig" Text="[&quot;[Initialisierung] E-Mail Versand: &quot; &amp; SendEmail.ToString() &amp; &quot; | Empfaenger: &quot; &amp; If(String.IsNullOrWhiteSpace(BenutzerEmail), &quot;[nicht gesetzt]&quot;, BenutzerEmail) &amp; &quot; | Absender: &quot; &amp; If(String.IsNullOrWhiteSpace(SmtpFromAddress), &quot;[nicht gesetzt]&quot;, SmtpFromAddress)]" />
       </Sequence>
       <FlowStep.Next>
         <FlowStep x:Name="__ReferenceID3">
@@ -288,7 +298,7 @@
                     <OutArgument x:TypeArguments="scg:List(x:String)">[KursListe]</OutArgument>
                   </Assign.To>
                   <Assign.Value>
-                    <InArgument x:TypeArguments="scg:List(x:String)">[If(JToken.Parse(KursListeJson).Type = JTokenType.Array, JToken.Parse(KursListeJson), JObject.Parse(KursListeJson)("courses")).Where(Function(tok) (tok("shortname") IsNot Nothing AndAlso tok("shortname").ToString().Contains(SemesterFilter)) OrElse (tok("fullname") IsNot Nothing AndAlso tok("fullname").ToString().Contains(SemesterFilter))).Select(Function(tok) tok("id").ToString()).ToList()]</InArgument>
+                    <InArgument x:TypeArguments="scg:List(x:String)">[If(JToken.Parse(KursListeJson).Type = JTokenType.Array, JToken.Parse(KursListeJson), JObject.Parse(KursListeJson)("courses")).Where(Function(tok) If(String.IsNullOrWhiteSpace(CourseFilter), (tok("shortname") IsNot Nothing AndAlso tok("shortname").ToString().Contains(SemesterFilter)) OrElse (tok("fullname") IsNot Nothing AndAlso tok("fullname").ToString().Contains(SemesterFilter)), CourseFilter.Split(New Char() {","c, ";"c, " "c}, StringSplitOptions.RemoveEmptyEntries).Contains(tok("id").ToString()))).Select(Function(tok) tok("id").ToString()).ToList()]</InArgument>
                   </Assign.Value>
                 </Assign>
                 <Assign DisplayName="Kursindex initialisieren" sap2010:WorkflowViewState.IdRef="Assign_2">
@@ -626,10 +636,11 @@
                             <OutArgument x:TypeArguments="x:Object">[SmtpCallResult]</OutArgument>
                           </Assign.To>
                           <Assign.Value>
-                            <InArgument x:TypeArguments="x:Object">[CallByName(System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("powershell.exe", "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File " &amp; Chr(34) &amp; System.IO.Path.Combine(Environment.CurrentDirectory, "scripts", "render_lernplan_email.ps1") &amp; Chr(34) &amp; " -OutputDir " &amp; Chr(34) &amp; Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) &amp; Chr(34) &amp; " -Semester " &amp; Chr(34) &amp; SemesterFilter &amp; Chr(34)) With {.UseShellExecute = False, .CreateNoWindow = True}), "WaitForExit", CallType.Method)]</InArgument>
+                            <InArgument x:TypeArguments="x:Object">[CallByName(System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("powershell.exe", "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File " &amp; Chr(34) &amp; System.IO.Path.Combine(System.IO.Path.GetDirectoryName(EnvFilePath), "scripts", "render_lernplan_email.ps1") &amp; Chr(34) &amp; " -OutputDir " &amp; Chr(34) &amp; Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) &amp; Chr(34) &amp; " -Semester " &amp; Chr(34) &amp; SemesterFilter &amp; Chr(34) &amp; " -EnvPath " &amp; Chr(34) &amp; EnvFilePath &amp; Chr(34)) With {.UseShellExecute = False, .CreateNoWindow = True}), "WaitForExit", CallType.Method)]</InArgument>
                           </Assign.Value>
                         </Assign>
-                        <WriteLine DisplayName="[Abschluss] E-Mail Status" sap2010:WorkflowViewState.IdRef="WriteLine_11" Text="[If(SendEmail, &quot;[Abschluss] Alle Kurse verarbeitet. HTML-Mail mit PDF-Anhaengen vorbereitet/gesendet an: &quot; &amp; BenutzerEmail, &quot;[Abschluss] Alle Kurse verarbeitet. Markdown/HTML/PDF gerendert; E-Mail Versand uebersprungen (SEND_EMAIL=false).&quot;)]" />
+                        <WriteLine DisplayName="[Abschluss] SMTP Status anzeigen" sap2010:WorkflowViewState.IdRef="WriteLine_EmailStatusFile" Text="[If(System.IO.File.Exists(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), &quot;Lernplan_&quot; &amp; SemesterFilter &amp; &quot;_email_status.txt&quot;)), &quot;[Abschluss] &quot; &amp; System.IO.File.ReadAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), &quot;Lernplan_&quot; &amp; SemesterFilter &amp; &quot;_email_status.txt&quot;)).Trim(), &quot;[Abschluss] Kein SMTP-Statusfile gefunden.&quot;)]" />
+                        <WriteLine DisplayName="[Abschluss] Verarbeitung abgeschlossen" sap2010:WorkflowViewState.IdRef="WriteLine_11" Text="[&quot;[Abschluss] Alle Kurse verarbeitet. Verbindlicher E-Mail-Status steht in der SMTP_OK/SMTP_ERROR-Zeile oben.&quot;]" />
                       </Sequence>
                     </FlowStep>
                   </FlowDecision.False>

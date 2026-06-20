@@ -1,22 +1,33 @@
 param(
     [string]$OutputDir = [Environment]::GetFolderPath("MyDocuments"),
-    [string]$Semester = "FS26"
+    [string]$Semester = "FS26",
+    [string[]]$CourseIds = @(),
+    [string]$EnvPath = ""
 )
 
 $ErrorActionPreference = "Stop"
 
 function Read-DotEnv {
-    $envPath = $env:RPA_ENV_PATH
-    if ([string]::IsNullOrWhiteSpace($envPath)) {
-        $envPath = Join-Path (Get-Location) ".env"
+    $envFilePath = $EnvPath
+    if ([string]::IsNullOrWhiteSpace($envFilePath)) {
+        $scriptProjectEnv = Join-Path (Split-Path -Parent (Split-Path -Parent $PSCommandPath)) ".env"
+        if (Test-Path -LiteralPath $scriptProjectEnv) {
+            $envFilePath = $scriptProjectEnv
+        } elseif (-not [string]::IsNullOrWhiteSpace($env:RPA_ENV_PATH)) {
+            $envFilePath = $env:RPA_ENV_PATH
+        } else {
+            $envFilePath = Join-Path (Get-Location) ".env"
+        }
     }
 
     $config = @{}
-    if (-not (Test-Path -LiteralPath $envPath)) {
+    if (-not (Test-Path -LiteralPath $envFilePath)) {
         return $config
     }
 
-    foreach ($line in Get-Content -LiteralPath $envPath) {
+    Write-Host "Render/E-Mail .env geladen aus: $envFilePath"
+
+    foreach ($line in Get-Content -LiteralPath $envFilePath) {
         if ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith("#")) {
             continue
         }
@@ -47,6 +58,48 @@ function Convert-InlineMarkdown {
     $escaped = [regex]::Replace($escaped, '\*(.+?)\*', '<em>$1</em>')
     $escaped = [regex]::Replace($escaped, '`([^`]+)`', '<code>$1</code>')
     return $escaped
+}
+
+function Get-EncodingDamageScore {
+    param([string]$Text)
+
+    if ([string]::IsNullOrEmpty($Text)) {
+        return 0
+    }
+
+    $score = 0
+    $markers = @(
+        ([char]0x00C3).ToString(),
+        ([char]0x00C2).ToString(),
+        ([char]0xFFFD).ToString(),
+        ([char]0x00E2).ToString()
+    )
+    foreach ($marker in $markers) {
+        $score += ([regex]::Matches($Text, [regex]::Escape($marker))).Count
+    }
+    return $score
+}
+
+function Repair-TextEncoding {
+    param([AllowNull()][string]$Text)
+
+    if ($null -eq $Text) {
+        return ""
+    }
+
+    $clean = [System.Net.WebUtility]::HtmlDecode($Text)
+    if ($clean -match '[\u00C2\u00C3\u00E2\uFFFD]') {
+        try {
+            $candidate = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding(1252).GetBytes($clean))
+            if ((Get-EncodingDamageScore $candidate) -lt (Get-EncodingDamageScore $clean)) {
+                $clean = $candidate
+            }
+        } catch {
+            # Keep the original text if Windows-1252 repair is not available.
+        }
+    }
+
+    return $clean
 }
 
 function Convert-MarkdownToHtml {
@@ -127,14 +180,7 @@ function Convert-MarkdownToHtml {
 function Normalize-LearningPlanMarkdown {
     param([string]$Markdown)
 
-    $Markdown = $Markdown `
-        -replace 'Ãœ', 'Ü' `
-        -replace 'Ã¼', 'ü' `
-        -replace 'Ã¤', 'ä' `
-        -replace 'Ã¶', 'ö' `
-        -replace 'Ã„', 'Ä' `
-        -replace 'Ã–', 'Ö' `
-        -replace 'ÃŸ', 'ß'
+    $Markdown = Repair-TextEncoding $Markdown
 
     $lines = $Markdown -split "`r?`n"
     $clean = New-Object System.Collections.Generic.List[string]
@@ -193,12 +239,12 @@ function Normalize-LearningPlanMarkdown {
             '^\*\s+If data is missing',
             '^\*\s+Check against constraints',
             '^\*\s+Assumptions \(Annahmen\)',
-            '^\*\s+Overview \(Überblick\)',
+            '^\*\s+Overview \(Ueberblick\)',
             '^\*\s+Learning Goals \(Lernziele\)',
             '^\*\s+Weekly Plan \(Wochenplan\)',
             '^\*\s+Materials \(Materialien\)',
-            '^\*\s+Exam Preparation \(Prüfungsvorbereitung\)',
-            '^\*\s+Next Steps \(Nächste Schritte\)'
+            '^\*\s+Exam Preparation \(Pruefungsvorbereitung\)',
+            '^\*\s+Next Steps \(Naechste Schritte\)'
         )
 
         foreach ($pattern in $metaPatterns) {
@@ -212,14 +258,14 @@ function Normalize-LearningPlanMarkdown {
             continue
         }
 
-        $line = $line -replace '^\s*\*\s+\*Overview:\*\s*', ("## Überblick" + "`n")
+        $line = $line -replace '^\s*\*\s+\*Overview:\*\s*', ("## Ueberblick" + "`n")
         $line = $line -replace '^\s*\*\s+\*Learning (Goals|Objectives):\*\s*', ("## Lernziele" + "`n")
         $line = $line -replace '^\s*\*\s+\*Weekly Plan:\*\s*', ("## Wochenplan" + "`n")
         $line = $line -replace '^\s*\*\s+\*Materials:\*\s*', ("## Materialien" + "`n")
-        $line = $line -replace '^\s*\*\s+\*Exam Prep(aration)?:\*\s*', ("## Prüfungsvorbereitung" + "`n")
-        $line = $line -replace '^\s*\*\s+\*Next Steps:\*\s*', ("## Nächste Schritte" + "`n")
+        $line = $line -replace '^\s*\*\s+\*Exam Prep(aration)?:\*\s*', ("## Pruefungsvorbereitung" + "`n")
+        $line = $line -replace '^\s*\*\s+\*Next Steps:\*\s*', ("## Naechste Schritte" + "`n")
         $line = $line -replace '^\s*\*\s+\*Annahmen:\*\s*', ("## Annahmen" + "`n")
-        $line = $line -replace '^\s*\*\s+\*Course Theme:\*\s*', ("## Überblick" + "`n")
+        $line = $line -replace '^\s*\*\s+\*Course Theme:\*\s*', ("## Ueberblick" + "`n")
         $line = $line -replace '^\s*\*\s+\*Key Topics:\*\s*', ("## Lernziele" + "`n")
         $line = $line -replace '^\s*\*\s+\*Timeframe:\*\s*', ("## Wochenplan" + "`n")
 
@@ -232,11 +278,48 @@ function Normalize-LearningPlanMarkdown {
         if ($firstBlank -gt 0) {
             $title = $result.Substring(0, $firstBlank).Trim()
             $rest = $result.Substring($firstBlank).Trim()
-            $result = "$title`n`n## Überblick`n$rest"
+            $result = "$title`n`n## Ueberblick`n$rest"
         }
     }
 
     return $result + "`n"
+}
+
+function Get-ConfiguredCourseIds {
+    param(
+        [hashtable]$Config,
+        [string[]]$ExplicitCourseIds
+    )
+
+    $ids = @()
+    if ($ExplicitCourseIds -and $ExplicitCourseIds.Count -gt 0) {
+        $ids += $ExplicitCourseIds
+    }
+    if ($Config.ContainsKey("COURSE_FILTER") -and -not [string]::IsNullOrWhiteSpace($Config["COURSE_FILTER"])) {
+        $ids += ($Config["COURSE_FILTER"] -split '[,;\s]+' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    }
+
+    return @($ids | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' } | Select-Object -Unique)
+}
+
+function Find-PlanFiles {
+    param(
+        [string]$OutputPath,
+        [string]$Semester,
+        [string[]]$CourseIds
+    )
+
+    if ($CourseIds -and $CourseIds.Count -gt 0) {
+        $selected = @()
+        foreach ($courseId in $CourseIds) {
+            $selected += Get-ChildItem -LiteralPath $OutputPath -Filter "Lernplan_${Semester}_Kurs${courseId}*.md" |
+                Sort-Object LastWriteTime -Descending |
+                Select-Object -First 1
+        }
+        return @($selected | Where-Object { $null -ne $_ } | Sort-Object Name)
+    }
+
+    return @(Get-ChildItem -LiteralPath $OutputPath -Filter "Lernplan_${Semester}_Kurs*.md" | Sort-Object Name)
 }
 
 function New-FullHtmlDocument {
@@ -317,10 +400,21 @@ $outputPath = [System.IO.Path]::GetFullPath($OutputDir)
 if (-not (Test-Path -LiteralPath $outputPath)) {
     New-Item -ItemType Directory -Path $outputPath | Out-Null
 }
+$statusPath = Join-Path $outputPath "Lernplan_${Semester}_email_status.txt"
 
-$plans = Get-ChildItem -LiteralPath $outputPath -Filter "Lernplan_${Semester}_Kurs*.md" | Sort-Object Name
+function Write-EmailStatus {
+    param([string]$Message)
+
+    $line = "$(Get-Date -Format "yyyy-MM-dd HH:mm:ss") $Message"
+    Set-Content -LiteralPath $statusPath -Value $line -Encoding UTF8
+    Write-Host $line
+}
+
+$configuredCourseIds = Get-ConfiguredCourseIds -Config $config -ExplicitCourseIds $CourseIds
+$plans = Find-PlanFiles -OutputPath $outputPath -Semester $Semester -CourseIds $configuredCourseIds
 if ($plans.Count -eq 0) {
-    throw "Keine Markdown-Lernplaene gefunden in $outputPath."
+    $courseMessage = if ($configuredCourseIds.Count -gt 0) { " fuer Kurs(e) $($configuredCourseIds -join ', ')" } else { "" }
+    throw "Keine Markdown-Lernplaene$courseMessage gefunden in $outputPath."
 }
 
 $browser = Find-Browser
@@ -344,7 +438,7 @@ foreach ($plan in $plans) {
 
 $sendEmail = $config.ContainsKey("SEND_EMAIL") -and $config["SEND_EMAIL"].Trim().ToLowerInvariant() -eq "true"
 if (-not $sendEmail) {
-    Write-Host "PDFs gerendert. E-Mail Versand uebersprungen, weil SEND_EMAIL nicht true ist."
+    Write-EmailStatus "PDFs gerendert. E-Mail Versand uebersprungen, weil SEND_EMAIL nicht true ist."
     exit 0
 }
 
@@ -388,7 +482,7 @@ if ($smtpHost -eq "smtp.gmail.com" -and ([string]::IsNullOrWhiteSpace($smtpUsern
 $from = $config["SMTP_FROM_ADDRESS"]
 if ([string]::IsNullOrWhiteSpace($from)) {
     if (-not [string]::IsNullOrWhiteSpace($smtpUsername) -and $smtpUsername.ToLowerInvariant().EndsWith("@gmail.com")) {
-        $from = $smtpUsername -replace "@gmail\.com$", "+uipath-moodle@gmail.com"
+        $from = $smtpUsername
     } elseif (-not [string]::IsNullOrWhiteSpace($smtpUsername) -and $smtpUsername.Contains("@")) {
         $from = $smtpUsername
     } else {
@@ -407,7 +501,7 @@ $client = New-Object System.Net.Mail.SmtpClient($smtpHost, $smtpPort)
 try {
     $message.From = $from
     $message.To.Add($config["RECIPIENT_EMAIL"])
-    $message.Subject = "Lernplaene $Semester"
+    $message.Subject = "UiPath Demo Lernplaene $Semester - $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")"
     $message.Body = $body
     $message.IsBodyHtml = $true
 
@@ -420,7 +514,10 @@ try {
         $client.Credentials = New-Object System.Net.NetworkCredential($smtpUsername, ($smtpPassword -replace "\s+", ""))
     }
     $client.Send($message)
-    Write-Host "E-Mail mit HTML-Body und PDF-Anhaengen ueber $smtpHost`:$smtpPort gesendet an $($config["RECIPIENT_EMAIL"])."
+    Write-EmailStatus "SMTP_OK: E-Mail mit HTML-Body und PDF-Anhaengen ueber $smtpHost`:$smtpPort gesendet an $($config["RECIPIENT_EMAIL"]) von $from. Anhaenge: $($attachments.Count)."
+} catch {
+    Write-EmailStatus "SMTP_ERROR: $($_.Exception.Message)"
+    throw
 } finally {
     $message.Dispose()
     $client.Dispose()

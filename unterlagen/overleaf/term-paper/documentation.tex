@@ -3,7 +3,6 @@
 % Packages + configuration
 \input{packages_and_configuration}
 
-
 \begin{document}
 \input{title}
 
@@ -13,25 +12,25 @@
 
 \section{Einleitung und Prozessbeschreibung}
 \subsection{Ausgangslage}
-Im Studienalltag liegen relevante Informationen nicht an einem einzigen, standardisierten Ort vor. Aufgaben, Deadlines, Semesterinformationen, Folien, Übungsblätter und organisatorische Hinweise befinden sich in verschiedenen Moodle-Kursen und werden von Dozierenden unterschiedlich strukturiert. Wer daraus einen Lernplan erstellen will, muss Kurse öffnen, Dokumente suchen, Termine erkennen, Inhalte kopieren und die Informationen anschliessend manuell in ein Tool wie ChatGPT oder Gemini übertragen .
+Im Studienalltag sind relevante Informationen nicht an einem einzigen, standardisierten Ort gebündelt. Aufgaben, Deadlines, Semesterinformationen, Folien, Übungsblätter und organisatorische Hinweise verteilen sich über verschiedene Moodle-Kurse, die jede Dozentin und jeder Dozent anders strukturiert. Wer daraus einen Lernplan ableiten möchte, muss jeden Kurs einzeln öffnen, die passenden Dokumente suchen, Termine heraussuchen, Inhalte kopieren und sie schliesslich von Hand in ein Werkzeug wie ChatGPT oder Gemini übertragen.
 
-Der ausgewählte Prozess eignet sich für eine RPA-Gruppenarbeit, weil er eine klare fachliche Relevanz besitzt und gleichzeitig typische Automatisierungsfragen sichtbar macht: Der Ablauf ist wiederkehrend, regelbasiert und digital, enthält aber auch unstrukturierte Elemente wie PDF-Dokumente und natürlichsprachliche Kursinformationen. Damit ist der Prozess weder trivial noch zu komplex. Er erlaubt, Prozessanalyse, technische Qualifikation, Wirtschaftlichkeit, UiPath-Umsetzung und den Einsatz von AI in einem zusammenhängenden Beispiel zu prüfen.
+Für eine RPA-Gruppenarbeit eignet sich dieser Prozess besonders, weil er fachlich relevant ist und zugleich typische Automatisierungsfragen aufwirft: Der Ablauf ist wiederkehrend, regelbasiert und digital, enthält mit PDF-Dokumenten und natürlichsprachlichen Kursinformationen aber auch unstrukturierte Anteile. Damit ist er weder trivial noch übermässig komplex und lässt sich nutzen, um Prozessanalyse, technische Qualifikation, Wirtschaftlichkeit, UiPath-Umsetzung und den Einsatz generativer KI an einem durchgehenden Beispiel zu untersuchen.
 
 \subsection{Zielsetzung und Forschungsfrage}
-Ziel der Lösung ist ein automatisierter Lernplanungsprozess, der aktuelle Moodle-Informationen sammelt, strukturiert, an ein LLM übergibt und das Ergebnis als Lernplan ausgibt. Daraus ergibt sich folgende Leitfrage: \emph{Wie kann ein Moodle-basierter Lernplanungsprozess durch RPA, API-Nutzung und generative KI so automatisiert werden, dass wiederkehrende manuelle Arbeit reduziert und Studieninformationen zuverlässiger nutzbar werden?}
+Ziel der Lösung ist ein automatisierter Lernplanungsprozess, der aktuelle Moodle-Informationen sammelt, strukturiert, an ein LLM übergibt und das Ergebnis als fertigen Lernplan ausgibt. Daraus leitet sich die folgende Leitfrage ab: \emph{Wie kann ein Moodle-basierter Lernplanungsprozess durch RPA, API-Nutzung und generative KI so automatisiert werden, dass wiederkehrende manuelle Arbeit reduziert und Studieninformationen zuverlässiger nutzbar werden?}
 
-Der Nutzen liegt in drei Bereichen. Erstens reduziert die Lösung manuellen Aufwand, weil wiederkehrende Such-, Kopier- und Strukturierungsarbeiten automatisiert werden. Zweitens verbessert sie die Übersicht über Kurse, Deadlines und Lernaufwand. Drittens entsteht ein einheitliches Ausgabeformat, obwohl die Eingabeinformationen aus verschiedenen Kursen und Dateitypen stammen. Der Prozess ist damit ein gutes Beispiel für Hyperautomation: UiPath steuert und überwacht den Ablauf, strukturierte Schnittstellen liefern Daten, und GenAI übernimmt die semantische Verdichtung in einen Lernplan.
+Der Nutzen liegt auf drei Ebenen: Die Lösung senkt den manuellen Aufwand, indem sie wiederkehrende Such-, Kopier- und Strukturierungsarbeiten automatisiert; sie schafft mehr Übersicht über Kurse, Deadlines und Lernaufwand; und sie liefert ein einheitliches Ausgabeformat, obwohl die Eingaben aus verschiedenen Kursen und Dateitypen stammen.
 
 \subsection{Was ist RPA und wie funktioniert es im Prinzip?}
-Robotic Process Automation beschreibt die Automatisierung digitaler, regelbasierter Tätigkeiten durch Software-Roboter. Ein Bot kann beispielsweise Applikationen öffnen, Felder ausfüllen, Dateien lesen, Daten transformieren, APIs ansprechen und Ergebnisse speichern oder versenden. Im Unterschied zu klassischer Softwareentwicklung liegt der Fokus auf der Automatisierung bestehender Arbeitsabläufe über vorhandene Benutzeroberflächen und Schnittstellen.
+Robotic Process Automation bezeichnet die Automatisierung digitaler, regelbasierter Tätigkeiten durch Software-Roboter. Ein Bot kann etwa Applikationen öffnen, Felder ausfüllen, Dateien lesen, Daten transformieren, APIs ansprechen sowie Ergebnisse speichern oder versenden. Anders als die klassische Softwareentwicklung setzt RPA dabei auf bestehende Arbeitsabläufe und nutzt deren vorhandene Benutzeroberflächen und Schnittstellen.
 
-Im vorliegenden Projekt wird RPA erweitert: Der Bot führt nicht bloss Klick- und Kopieraktionen aus, sondern verbindet Moodle-Daten, API-Aufrufe, lokale Datenstrukturen, Validierung und LLM-Verarbeitung. Diese Kombination ist charakteristisch für Hyperautomation. Sie erhöht den Nutzen, weil nicht nur ein einzelner manueller Schritt ersetzt wird, sondern ein ganzer Informationsprozess vom Auslesen bis zum fertigen Lernplan automatisiert wird.
+Im vorliegenden Projekt geht RPA über diesen Rahmen hinaus: Der Bot führt nicht bloss Klick- und Kopieraktionen aus, sondern verknüpft Moodle-Daten, API-Aufrufe, lokale Datenstrukturen, Validierung und LLM-Verarbeitung. Diese Kombination ist charakteristisch für Hyperautomation und steigert den Nutzen, weil nicht nur ein einzelner Handgriff ersetzt, sondern ein ganzer Informationsprozess vom Auslesen bis zum fertigen Lernplan automatisiert wird.
 
-\subsection{Beschreibung des Prozesses }
-Der Ist-Prozess beginnt mit der manuellen Suche in Moodle. Studierende öffnen Kursseiten, identifizieren relevante Dokumente, suchen Semesterinformationen, kopieren Inhalte und formulieren daraus Prompts für ein LLM. Der Soll-Prozess startet per User-Trigger in UiPath. Danach werden Konfiguration und Zugangsdaten geladen, Moodle-Kurse ausgelesen, nach Semester gefiltert, Kursinformationen und Semester-PDFs verarbeitet, Rohdaten bereinigt, an Gemini übergeben, validiert und als Lernplan gespeichert.
+\subsection{Beschreibung des Prozesses}
+Der Ist-Prozess entspricht dem eingangs geschilderten manuellen Vorgehen in Moodle. Der Soll-Prozess startet dagegen per Benutzer-Trigger in UiPath: Der Bot lädt Konfiguration und Zugangsdaten, liest die Moodle-Kurse aus und filtert sie nach Semester, verarbeitet Kursinformationen und Semester-PDFs, bereinigt die Rohdaten, übergibt sie an Gemini, validiert das Ergebnis und speichert es als Lernplan. Abschliessend werden die erzeugten Lernpläne zu PDF-Berichten gebündelt und der Nutzerin oder dem Nutzer per E-Mail zugestellt. Die einzelnen Schritte werden in Abschnitt~\ref{sec:automatisierungsschritte} im Detail beschrieben.
 
 \subsection{Manuelle Durchführung als Referenzprozess}
-Vor der Automatisierung musste der Ablauf manuell in Moodle durchgeführt werden. Dazu gehörten das Öffnen des passenden Kurses, das Durchsuchen der bereitgestellten Materialien, das Erkennen relevanter Abgaben und Fristen sowie das anschliessende Strukturieren der Informationen zu einem Lernplan. Die folgenden Screenshots zeigen exemplarisch diesen manuellen Referenzprozess, den die Automatisierung fachlich ersetzt.
+Die folgenden Screenshots veranschaulichen den oben beschriebenen manuellen Referenzprozess in Moodle: vom Öffnen des Kurses über das Sichten der Materialien und Fristen bis zum daraus erstellten Lernplan, den die Automatisierung fachlich ersetzt.
 
 \begin{figure}[H]
 \centering
@@ -57,7 +56,115 @@ Vor der Automatisierung musste der Ablauf manuell in Moodle durchgeführt werden
 \caption{Screenshots des manuellen Referenzprozesses und des Zielergebnisses}
 \end{figure}
 
-\begin{figure}[h]
+\section{Prozessqualifizierung}
+Die Evaluation des vorgeschlagenen Prozesses \textit{Moodle-to-LLM Study Planner} folgt einer zweistufigen Qualifizierungsmethodik, die auf den standardisierten Kriterien des Process Qualification Document (PQD) beruht. Geprüft wird der Prozess dabei nacheinander auf seine technische Machbarkeit und auf seine ökonomische Sinnhaftigkeit (Business Case und Return on Investment).
+\subsection{Technische Eignung}
+Technisch ist der Prozess für eine Automatisierung gut geeignet, weil alle Kernaktivitäten digital ablaufen. Moodle bildet die primäre Datenquelle, die Verarbeitung erfolgt lokal in strukturierten Formaten wie JSON oder Text, und Gemini ist über eine API angebunden. UiPath Studio steuert den Ablauf und deckt Logging, Fehlerbehandlung, Dateizugriffe, HTTP-Requests und Prozessschleifen ab. Besonders vorteilhaft ist, dass der Prozess für die Datenbeschaffung nicht auf fragile UI-Klicks angewiesen ist: Wo möglich, liest der Bot die Moodle-Daten über API- oder CLI-Zugriff aus, was die Lösung stabiler macht als reines Screen-Scraping. Eine Ausnahme bildet der Login: Hier füllt der Bot das Anmeldeformular im Browser klassisch über Klick- und Eingabeaktionen aus; erst die anschliessende Datenverarbeitung läuft über API beziehungsweise CLI.
+
+Zugleich besitzt der Prozess genügend Komplexität, um RPA-Kompetenzen nachzuweisen: Er umfasst Konfiguration, Credentials, Session-Handling, Kursfilterung, Schleifen über mehrere Kurse, unstrukturierte PDF-Inhalte, LLM-Kommunikation, Validierung, Retry-Logik, Report-Erstellung und Abschlusskommunikation. Damit geht er deutlich über eine einfache Makro-Automatisierung hinaus.
+
+\subsection{Ökonomische Qualifizierung und Business Case}
+Die ökonomische Evaluation orientiert sich an den theoretischen Vorgaben zur Aufwands- und Nutzenbestimmung von \cite{Wanner2019} sowie \cite{Beetz2019}. Zur Ermittlung der Wirtschaftlichkeit (Return on Investment, ROI) wird der eingesparte manuelle Aufwand den Implementierungs- und Betriebskosten gegenübergestellt. Dabei sind zwei Einsatzszenarien zu unterscheiden, die sich im Kostenbild deutlich unterscheiden: Im ersten betreibt eine einzelne studierende Person die Lösung mit kostenlosen Werkzeugen für sich selbst; im zweiten stellt die Hochschule den Prozess als zentralen Dienst für einen ganzen Jahrgang bereit, wodurch kostenpflichtige Lizenzen, API-Nutzung und Wartung hinzukommen. Da der Nutzen in beiden Szenarien identisch ist, wird er vorab bestimmt.
+
+\subsubsection{Analyse des Einsparpotenzials (Nutzen-Dimension)}
+Gemäss dem vorliegenden Solution Design Document (SDD) -- der technischen Spezifikation, in der wir Prozessablauf, Architektur und Aktivitäten der Lösung festgehalten haben -- dauert das manuelle Suchen, Extrahieren und Aufbereiten der Kursdaten im Durchschnitt 15 Minuten pro Fall. Geht man konservativ von rund 3 solchen Fällen pro Woche und einer regulären Semesterdauer von 14 Wochen aus, ergibt sich pro Studierende:r das folgende quantitative Einsparpotenzial:
+
+\begin{equation}
+\begin{split}
+\text{Automatisierbarer Aufwand} &= 3 \text{ Fälle/Woche} \cdot 15 \text{ Min./Fall} \cdot 14 \text{ Wochen} \\
+&= 630 \text{ Minuten} \ (\mathbf{10{,}5 \text{ Stunden/Semester}})
+\end{split}
+\end{equation}
+
+Studierende werden für ihren Studienaufwand zwar nicht entlöhnt, doch ihre Zeit besitzt dennoch einen ökonomischen Wert. Dieser wird über Opportunitätskosten abgebildet, also über den Nutzen, der entgeht, weil die Zeit nicht anderweitig -- etwa für einen studentischen Nebenjob oder vertieftes Lernen -- eingesetzt werden kann. Der angesetzte Satz von CHF 20.-- pro Stunde orientiert sich an einem typischen studentischen Nebenverdienst und macht die eingesparte Zeit monetär vergleichbar. Daraus resultiert ein individueller monetärer Nutzen von \textbf{rund CHF 210.-- pro Semester} und Studierendem. Über einen gesamten Studiengangsjahrgang von rund 30 Studierenden summiert sich die eingesparte Zeit auf etwa 315 Stunden bzw. einen Gesamtnutzen von \textbf{rund CHF 6'300.-- pro Semester}.
+
+\subsubsection{Szenario 1: Nutzung durch einzelne Studierende}
+In diesem Szenario betreibt eine studierende Person die Automatisierung eigenständig auf dem eigenen Rechner. Zum Einsatz kommen die kostenlose UiPath Community Edition, das Free-Tier der Gemini-API und die lokale Ausführung; die laufenden Kosten betragen damit praktisch null (Tabelle~\ref{tab:betriebskosten}).
+
+\begin{table}[ht]
+\centering
+\caption{Laufende monatliche Betriebskosten im studentischen Self-Service}
+\label{tab:betriebskosten}
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\toprule
+\textbf{Kostenkomponente} & \textbf{Kosten pro Monat} \\
+\midrule
+UiPath Community Edition (Einzelnutzung) & CHF 0.-- \\
+Gemini API (Free Tier) & CHF 0.-- \\
+Lokale Ausführung (eigener Rechner) & CHF 0.-- \\
+\midrule
+\textbf{Gesamtkosten pro Monat} & \textbf{$\approx$ CHF 0.--} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Da keine laufenden Kosten anfallen, beschränkt sich der Aufwand auf die einmalige Entwicklung der Lösung, die im Rahmen dieses Projekts bereits erbracht wurde. Für die einzelne Person ist dieser Aufwand somit vernachlässigbar, während ihr ein wiederkehrender Nutzen von rund CHF 210.-- pro Semester gegenübersteht. Im Self-Service ist die Lösung damit faktisch sofort wirtschaftlich.
+
+\subsubsection{Szenario 2: Bereitstellung durch die Hochschule}
+Stellt die Hochschule den Prozess als zentralen Dienst für einen ganzen Jahrgang bereit, ändert sich das Kostenbild grundlegend. Die UiPath Community Edition ist für den organisationsweiten, produktiven Einsatz nicht lizenziert, und das kostenlose Gemini-Kontingent genügt für das Volumen mehrerer Dutzend Studierender nicht mehr. Es fallen daher kostenpflichtige UiPath-Lizenzen sowie eine bezahlte Nutzung der Gemini-API an. Hinzu kommt der laufende Betrieb: Eine zentral bereitgestellte Lösung muss von einer mitarbeitenden Person gewartet werden, etwa für Updates, Fehlerbehebung und die Anpassung an Änderungen in Moodle.
+
+Bevor diese laufenden Kosten entstehen, muss das Tool jedoch zunächst einmalig entwickelt werden. Tabelle~\ref{tab:entwicklungskosten} stellt dem RPA-Ansatz in UiPath bewusst eine klassische, native Code-Lösung gegenüber. Diese Gegenüberstellung dient nicht als blosses Negativbeispiel: Eine native Entwicklung bietet durchaus eigene Vorteile -- etwa die volle Kontrolle über den Quellcode, eine potenziell höhere Performance, geringere Abhängigkeit von Lizenzanbietern sowie flexiblere Integrationsmöglichkeiten -- und sollte daher als ernsthafte Option in die Technologieentscheidung einbezogen werden.
+
+\begin{table}[ht]
+\centering
+\caption{Einführungs-/Entwicklungskosten: native Code-Lösung vs. UiPath}
+\label{tab:entwicklungskosten}
+\begin{tabularx}{\textwidth}{@{}l *{2}{>{\centering\arraybackslash}X}@{}}
+\toprule
+\textbf{Kriterium} & \textbf{Klassische Code-Lösung} & \textbf{UiPath-Automatisierung} \\
+\midrule
+Geschätzter Entwicklungsaufwand & 30 Stunden & 12 Stunden \\
+Interner Lohnwert (CHF 40.--/h) & CHF 1'200.-- & CHF 480.-- \\
+Marktüblicher Verkaufspreis (CHF 150.--/h) & CHF 4'500.-- & CHF 1'800.-- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Der Einsatz von UiPath senkt den einmaligen Entwicklungsaufwand somit deutlich um 18 Stunden bzw. 60\,\% (von CHF 1'200.-- auf CHF 480.-- internem Lohnwert). Als Alternative käme eine Low-Code-Plattform wie Microsoft Power Automate in Frage, die über bestehende Microsoft-365-Bildungslizenzen häufig bereits abgedeckt ist; die Wahl von UiPath erfolgte hier primär aus didaktischen Gründen.
+
+Unabhängig von der gewählten Technologie stellt sich zudem die grundsätzliche Make-or-Buy-Frage. Verfügt die Hochschule über die nötigen Entwicklungskompetenzen und freie personelle Ressourcen, lässt sich die Lösung in-house realisieren -- mit den oben ausgewiesenen Kosten und voller Kontrolle über Wartung und Weiterentwicklung. Fehlen diese Kompetenzen oder Kapazitäten, kann die Automatisierung stattdessen extern als Individualsoftware eingekauft werden. Dies verlagert den Entwicklungsaufwand auf einen Dienstleister, schlägt sich aber im marktüblichen Verkaufspreis (Tabelle~\ref{tab:entwicklungskosten}) nieder und schafft eine gewisse Abhängigkeit bei künftigen Anpassungen und beim Support.
+
+Zusammen mit den laufenden Lizenz-, API- und Wartungskosten ergibt sich für den Hochschulbetrieb das in Tabelle~\ref{tab:betriebskosten-hochschule} dargestellte Kostenbild.
+
+\begin{table}[ht]
+\centering
+\caption{Kostenbild im Hochschulbetrieb (Schätzwerte)}
+\label{tab:betriebskosten-hochschule}
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\toprule
+\textbf{Kostenkomponente} & \textbf{Kosten} \\
+\midrule
+Entwicklung (einmalig, via UiPath) & CHF 480.-- einmalig \\
+UiPath-Lizenzierung (Basic-Tier, ca. CHF 25.--/Monat) & ca. CHF 300.--/Jahr \\
+Gemini API (kostenpflichtig, Jahrgang) & ca. CHF 200.--/Jahr \\
+Wartung ($\approx$ 2 h/Monat à CHF 40.--) & ca. CHF 1'000.--/Jahr \\
+\midrule
+\textbf{Laufende Kosten gesamt} & \textbf{ca. CHF 1'500.--/Jahr} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Wichtig ist dabei, dass für diesen geringen, periodisch laufenden Workload keine teure Enterprise-Lizenzierung mit dediziertem \textit{Unattended Robot} (bis zu CHF 13'000.--/Jahr) nötig ist: Ein zentraler, schlanker Betrieb lässt sich bereits mit dem UiPath Basic-Tier ab ca. CHF 25.-- pro Monat abdecken. Den laufenden Kosten von rund CHF 1'500.-- pro Jahr (zuzüglich der einmaligen Entwicklung von CHF 480.--) steht ein jährlicher Bruttonutzen von rund CHF 12'600.-- pro Jahrgang gegenüber (CHF 6'300.-- pro Semester). Die Lösung ist somit auch im Hochschulbetrieb bereits im ersten Jahr klar wirtschaftlich. Da die Fixkosten -- Entwicklung, Wartung und Lizenz -- weitgehend unabhängig von der Nutzerzahl sind, verbessert sich die Wirtschaftlichkeit mit jeder weiteren nutzenden Person zusätzlich (Skaleneffekt).
+
+Insgesamt qualifiziert sich der Prozess damit in beiden Szenarien als wirtschaftlich attraktive Automatisierung: im Self-Service praktisch kostenlos und sofort rentabel, im Hochschulbetrieb dank schlanker Lizenzierung bereits im ersten Jahr -- eine \textit{Low Hanging Fruit} mit geringer Komplexität und hohem Wertbeitrag (\textit{Best Value}).
+
+\section{Beschreibung der Automatisierung}
+\subsection{Kernanwendungen und Architektur}
+Die Lösung ruht auf vier Kernbausteinen: UiPath Studio dient als Entwicklungsumgebung und Execution Engine, Moodle als Datenquelle für Kurse, Aufgaben und Semesterinformationen. Die extrahierten Rohdaten werden lokal in JSON- oder Textdateien zwischengespeichert, bevor Gemini sie zu einem Lernplan verarbeitet.
+
+Der Ablauf folgt einem API-first-Ansatz, ergänzt durch eine RPA-Orchestrierung. In einer frühen Projektphase hatten wir geplant, den gesamten Zugriff -- inklusive Datenabruf -- über klassische Browseraktionen abzuwickeln. Im finalen SDD beschränken sich solche Browseraktionen wie \texttt{Open Browser}, \texttt{Type Into Username}, \texttt{Type Into Password} und \texttt{Click Login} dagegen auf den Login, der sich nicht über eine API abbilden lässt; das eigentliche Auslesen der Daten haben wir auf Moodle CLI/API und einen Docker-Container umgestellt. Diese Entwicklung ist sinnvoll: Für Login und Bedienung ist UI-Automatisierung zwar anschaulich, doch beim wiederholten Auslesen von Daten sind APIs stabiler, schneller und besser testbar. UiPath bleibt dennoch zentral, weil es Trigger, Konfiguration, Ablaufsteuerung, Logging, Dateiverarbeitung, HTTP-Requests und Fehlerbehandlung zusammenführt.
+
+\subsection{Automatisierungsschritte}
+\label{sec:automatisierungsschritte}
+Abbildung~\ref{fig:bpmn} fasst den gesamten Ablauf im Überblick zusammen; im Folgenden werden die einzelnen Schritte erläutert. Der Prozess startet manuell per Tastendruck in UiPath. Ein zeitgesteuerter Trigger wurde bewusst verworfen, weil Lernpläne meist genau dann gebraucht werden, wenn Studierende aktiv nach Kursaktualisierungen suchen. Nach dem Start lädt der Bot Konfigurationswerte wie Moodle-URL, Output-Pfad, Semesterkennung und API-Endpunkte. Zugangsdaten sind nicht im Workflow hart codiert, sondern liegen in Umgebungsvariablen oder einem Credential Store, etwa \texttt{MOODLE\_USERNAME}, \texttt{MOODLE\_PASSWORD} und ein Gemini-API-Key.
+
+Anschliessend prüft der Bot die Moodle-Session und meldet sich bei ungültiger Sitzung neu an. Danach liest er die Kursliste aus Moodle und verarbeitet sie als JSON. Die Kurse filtert er nach der aktuellen Semesterkategorie, beispielsweise FS26, und prüft für jeden, ob relevante Details vorhanden sind, darunter Kursname, Kurslink, Aufgaben, Beschreibungen, Abgabedaten und Links auf Semesterinformationen. Findet er ein Semesterinformations-PDF, extrahiert er dessen Inhalt und ergänzt damit die Rohdaten.
+
+Nach dem Scraping folgt die Datenbereinigung: HTML-Tags, überflüssige Leerzeichen und uneinheitliche Datumsformate werden entfernt oder vereinheitlicht. Daraus baut UiPath eine strukturierte Datentabelle beziehungsweise ein JSON-Objekt auf. Die anschliessende Validierung prüft, ob Aufgaben vorhanden sind, ob Deadlines fehlen und ob zentrale Felder leer geblieben sind. Erst dann entsteht der Prompt. Er muss kompakt genug für das Token-Limit bleiben, zugleich aber genügend Kontext bieten, damit das LLM einen brauchbaren Lernplan erstellen kann.
+
+Der API-Aufruf an Gemini liefert eine Antwort, die ihrerseits validiert wird. Ein einfaches Kriterium ist die Mindestlänge des Ergebnisses; zusätzlich lassen sich Pflichtbestandteile wie Kursname, Deadline, empfohlene Lernaktivität und Priorität prüfen. Ist die Antwort ungültig, wiederholt der Bot den Request bis zu drei Mal; bleibt sie auch dann ungültig, loggt er einen Fehler und markiert den betroffenen Kurs als Ausnahme. Bei gültigem Ergebnis erstellt er einen PDF-Report. Nach jedem Kurs kehrt der Prozess zur Frage zurück, ob ein weiterer Kurs vorliegt. Sind alle Kurse verarbeitet, schreibt der Bot eine Abschluss-E-Mail und beendet den Prozess.
+
+\begin{figure}[H]
 \centering
 \resizebox{0.96\textwidth}{!}{%
 \begin{tikzpicture}[
@@ -131,101 +238,29 @@ Vor der Automatisierung musste der Ablauf manuell in Moodle durchgeführt werden
 \end{tikzpicture}
 }
 \caption{BPMN-orientierte Übersicht des fachlichen Zielprozesses}
+\label{fig:bpmn}
 \end{figure}
 
-\section{Prozessqualifizierung}
-Die Evaluation des vorgeschlagenen Prozesses Moodle-to-LLM Study Planner erfolgt über eine zweistufige Qualifizierungsmethodik, welche auf den standardisierten Kriterien des Process Qualification Documents (PQD) basiert. Hierbei wird der Prozess sequenziell auf seine technische Machbarkeit sowie seine ökonomische Sinnhaftigkeit (Business Case und Return on Investment) geprüft.
-\subsection{Technische Eignung}
-Der Prozess ist technisch für Automatisierung geeignet, weil alle Kernaktivitäten digital stattfinden. Moodle ist die primäre Datenquelle, die Verarbeitung erfolgt lokal in strukturierten Formaten wie JSON oder Text, und Gemini wird über eine API angebunden. UiPath Studio übernimmt die Steuerung des Ablaufs und kann Logging, Fehlerbehandlung, Dateizugriffe, HTTP Requests und Prozessschleifen abbilden. Besonders positiv ist, dass der Prozess nicht zwingend auf fragile UI-Klicks angewiesen ist: Wo möglich, werden Moodle-Daten über API- oder CLI-Zugriff ausgelesen. Dadurch wird die Lösung stabiler als reine Screen-Scraping-Automatisierung.
-
-Gleichzeitig besitzt der Prozess genügend Komplexität, um RPA-Kompetenzen nachzuweisen. Es gibt Konfiguration, Credentials, Session-Handling, Kursfilterung, Schleifen über mehrere Kurse, unstrukturierte PDF-Inhalte, LLM-Kommunikation, Validierung, Retry-Logik, Report-Erstellung und Abschlusskommunikation. Der Prozess umfasst damit deutlich mehr als eine einfache Makro-Automatisierung.
-
-\subsection{Ökonomische Qualifizierung und Business Case}
-Die ökonomische Evaluation des Prozesses \textit{Moodle-to-LLM Study Planner} folgt den theoretischen Vorgaben zur Aufwands- und Nutzenbestimmung nach Wanner2019 \cite{Wanner2019} sowie Beetz2019 \cite{Beetz2019}. Zur Ermittlung der Wirtschaftlichkeit (Return on Investment, ROI) werden die Dimensionen des manuellen Transaktionsvolumens den geschätzten Implementierungs- und Betriebskosten gegenübergestellt.
-
-\subsubsection{Analyse des Einsparpotenzials (Nutzen-Dimension)}
-Gemäss dem vorliegenden Solution Design Document (SDD) beträgt die durchschnittliche manuelle Prozessdauer für das Suchen, Extrahieren und Aufbereiten der Kursdaten 15 Minuten pro Fall. Bei einem konservativ geschätzten Volumen von 10 Fällen pro Woche und einer regulären Semesterdauer von 14 Wochen ergibt sich folgendes quantitatives Einsparpotenzial:
-
-\begin{equation}
-\begin{split}
-\text{Automatisierbarer Aufwand} &= 10 \text{ Fälle/Woche} \cdot 15 \text{ Min./Fall} \cdot 14 \text{ Wochen} \\
-&= 2'100 \text{ Minuten} \ (\mathbf{35 \text{ Stunden/Semester}})
-\end{split}
-\end{equation}
-
-Unter der Annahme eines studentischen Opportunitätskostensatzes (Lohnwert) von CHF 20.-- pro Stunde resultiert daraus ein individueller monetärer Nutzen von \textbf{CHF 700.-- pro Semester} und Studierendem. Hochgerechnet auf einen gesamten Studiengangsjahrgang von ca. 30 Studierenden beläuft sich das maximale Effizienzpotenzial auf \textbf{CHF 21'000.-- pro Semester}.
-
-\subsubsection{Kostenstruktur und Entwicklungsaufwand (Komplexitäts-Dimension)}
-Die initialen Entwicklungskosten sprechen im Sinne eines \textit{Quick Wins} deutlich für den Einsatz einer robotergestützten Prozessautomatisierung. Ein theoretischer Vergleich zwischen einer klassischen, nativen Code-Entwicklung und der modellbasierten Entwicklung in \textit{UiPath Studio} verdeutlicht die Effizienzvorteile in der Realisierungsphase:
-
-\begin{table}[ht]
-\centering
-\caption{Vergleich der Entwicklungskosten: Native Code-Lösung vs. UiPath}
-\label{tab:entwicklungskosten}
-\begin{tabular}{lrr}
-\hline
-\textbf{Kriterium} & \textbf{Klassische Code-Lösung} & \textbf{UiPath-Automatisierung} \\ \hline
-Geschätzter Entwicklungsaufwand & 30 Stunden & 12 Stunden \\
-Interner Lohnwert (CHF 40.--/h) & CHF 1'200.-- & CHF 480.-- \\
-Marktüblicher Verkaufspreis (CHF 150.--/h) & CHF 4'500.-- & CHF 1'800.-- \\ \hline
-\end{tabular}
-\end{table}
-
-Durch den Einsatz von UiPath wird der initiale Entwicklungsaufwand somit signifikant um 18 Stunden (bzw. 60\,\%) reduziert.
-
-\subsubsection{Betriebskosten und Amortisation (ROI-Betrachtung)}
-Die laufenden Betriebskosten (Total Cost of Ownership, TCO) variieren je nach Einsatzszenario. Während ein kommerzielles Business-Szenario inklusive dedizierter Developer-Lizenzen und der Bereitstellung eines \textit{Unattended Robots} Kosten von bis zu CHF 13'000.-- pro Jahr verursachen kann, ist für das studentische Umfeld ein schlankes, lokales Setup vorgesehen:
-
-\begin{table}[ht]
-\centering
-\caption{Laufende monatliche Betriebskosten im studentischen Setup}
-\label{tab:betriebskosten}
-\begin{tabular}{lr}
-\hline
-\textbf{Kostenkomponente} & \textbf{Kosten pro Monat} \\ \hline
-UiPath Basic Lizenzierung & ca. CHF 25.-- \\
-Infrastruktur \& Cloud-Betrieb (Zusatzdienste) & < CHF 50.-- \\ \hline
-\textbf{Gesamtkosten pro Monat} & \textbf{< CHF 75.--} \\ \hline
-\end{tabular}
-\end{table}
-
-Unter Berücksichtigung der geringen TCO im studentischen Betrieb (ca. CHF 375.-- bis CHF 450.-- pro Semester) und den geringen initialen Entwicklungskosten (CHF 480.--) steht dem Aufwand von unter CHF 1'000.-- ein jahrgangsbezogener Bruttonutzen von CHF 21'000.-- gegenüber. Ein positiver Return on Investment (ROI) wird damit nachweislich bereits \textbf{innerhalb des ersten Semesters} erreicht. Der Prozess qualifiziert sich somit theoretisch als hocheffiziente \textit{Low Hanging Fruit} mit geringer Komplexität und maximalem Wertbeitrag (\textit{Best Value}).
-
-\section{Beschreibung der Automatisierung}
-\subsection{Kernanwendungen und Architektur}
-Die Lösung besteht aus vier Kernbausteinen. Erstens wird UiPath Studio als Entwicklungsumgebung und Execution Engine verwendet. Zweitens dient Moodle als Datenquelle für Kurse, Aufgaben und Semesterinformationen. Drittens werden extrahierte Rohdaten lokal in JSON- oder Textdateien zwischengespeichert. Viertens verarbeitet Gemini die strukturierten Rohdaten zu einem Lernplan.
-
-Der Ablauf folgt einem API-first-Ansatz, ergänzt durch RPA-Orchestrierung. In den frühen Prozessnotizen wurden noch klassische Browseraktionen wie \texttt{Open Browser}, \texttt{Type Into Username}, \texttt{Type Into Password} und \texttt{Click Login} beschrieben. Im finalen SDD ist der Zugriff stärker über Moodle CLI/API und einen Docker-Container gedacht. Diese Entwicklung ist sinnvoll: UI-Automatisierung ist für Login und Bedienung verständlich, aber APIs sind für wiederholtes Datenauslesen stabiler, schneller und besser testbar. UiPath bleibt trotzdem zentral, weil es Trigger, Konfiguration, Ablaufsteuerung, Logging, Dateiverarbeitung, HTTP Requests und Fehlerbehandlung zusammenführt.
-
-\subsection{Automatisierungsschritte}
-Der Prozess startet manuell per Taste in UiPath. Ein zeitgesteuerter Trigger wurde verworfen, weil Lernpläne meist dann benötigt werden, wenn Studierende aktiv nach Kursaktualisierungen suchen. Nach dem Start lädt der Bot Konfigurationswerte wie Moodle-URL, Output-Pfad, Semesterkennung und API-Endpunkte. Zugangsdaten werden nicht im Workflow hart codiert, sondern über Umgebungsvariablen oder einen Credential Store bereitgestellt, zum Beispiel \texttt{MOODLE\_USERNAME}, \texttt{MOODLE\_PASSWORD} und ein Gemini API Key.
-
-Anschliessend prüft der Bot die Moodle-Session. Ist sie ungültig, wird ein Login durchgeführt. Danach wird die Kursliste aus Moodle gelesen und als JSON verarbeitet. Der Bot filtert die Kurse nach der aktuellen Semesterkategorie, beispielsweise FS26. Für jeden Kurs wird geprüft, ob relevante Details vorhanden sind. Dazu gehören Kursname, Kurslink, Aufgaben, Beschreibungen, Abgabedaten und Links auf Semesterinformationen. Falls ein Semesterinformations-PDF gefunden wird, extrahiert der Bot dessen Inhalt und ergänzt damit die Rohdaten.
-
-Nach dem Scraping folgt die Datenbereinigung. HTML-Tags, überflüssige Leerzeichen und uneinheitliche Datumsformate werden entfernt oder standardisiert. Danach baut UiPath eine strukturierte Datentabelle beziehungsweise ein JSON-Objekt. Die Validierung prüft, ob Aufgaben vorhanden sind, ob Deadlines fehlen und ob zentrale Felder leer geblieben sind. Erst danach wird ein Prompt erzeugt. Dieser Prompt muss kompakt genug für das Token-Limit sein, aber gleichzeitig genügend Kontext enthalten, damit das LLM einen brauchbaren Lernplan erzeugen kann.
-
-Der API-Aufruf an Gemini liefert eine Antwort, die wiederum validiert wird. Ein einfaches Kriterium ist eine Mindestlänge des Ergebnisses; zusätzlich können Pflichtbestandteile wie Kursname, Deadline, empfohlene Lernaktivität und Priorität geprüft werden. Ist die Antwort ungültig, wird der Request bis maximal drei Mal wiederholt. Nach drei ungültigen Antworten wird ein Fehler geloggt und der betroffene Kurs als Ausnahme markiert. Bei gültigem Ergebnis wird ein PDF-Report erstellt. Nach jedem Kurs springt der Prozess zurück zur Frage, ob ein weiterer Kurs vorhanden ist. Wenn alle Kurse verarbeitet sind, schreibt der Bot eine Abschluss-E-Mail und beendet den Prozess.
-
 \subsection{Testing und Qualitätssicherung}
-Die Teststrategie muss sowohl technische Stabilität als auch fachliche Ergebnisqualität abdecken. Ein erfolgreicher Standardtest prüft, ob der Bot mit gültigen Credentials startet, Kurse des aktuellen Semesters findet, Kursdetails extrahiert, einen LLM-Request sendet, eine gültige Antwort erhält und einen Report erzeugt. Negative Testfälle sind ebenso wichtig: ungültige Login-Daten, keine Kurse im aktuellen Semester, fehlende Semesterinformationen, nicht lesbare PDF-Dateien, API-Timeouts und LLM-Antworten ohne verwertbare Struktur.
+Die Teststrategie muss sowohl die technische Stabilität als auch die fachliche Ergebnisqualität abdecken. Ein erfolgreicher Standardtest prüft, ob der Bot mit gültigen Credentials startet, die Kurse des aktuellen Semesters findet, deren Details extrahiert, einen LLM-Request sendet, eine gültige Antwort erhält und einen Report erzeugt. Ebenso wichtig sind negative Testfälle: ungültige Login-Daten, keine Kurse im aktuellen Semester, fehlende Semesterinformationen, nicht lesbare PDF-Dateien, API-Timeouts sowie LLM-Antworten ohne verwertbare Struktur.
 
-Für jeden Testfall sollten Eingabedaten, erwartetes Verhalten und Akzeptanzkriterium definiert werden. Beispielsweise darf ein fehlendes PDF den gesamten Prozess nicht abbrechen; stattdessen soll der Bot den Kurs mit reduziertem Kontext verarbeiten und den Vorfall loggen. Bei API-Fehlern soll ein Retry erfolgen. Bei Datenschutz- oder Credential-Problemen soll der Prozess kontrolliert abbrechen. Damit wird verhindert, dass die Automatisierung nur in der Demo funktioniert, im realen Einsatz aber an Randfällen scheitert.
+Für jeden Testfall sollten Eingabedaten, erwartetes Verhalten und Akzeptanzkriterium festgelegt werden. So darf etwa ein fehlendes PDF den gesamten Prozess nicht abbrechen; stattdessen soll der Bot den Kurs mit reduziertem Kontext verarbeiten und den Vorfall loggen. Bei API-Fehlern soll ein Retry erfolgen, bei Datenschutz- oder Credential-Problemen ein kontrollierter Abbruch. Auf diese Weise wird verhindert, dass die Automatisierung zwar in der Demo funktioniert, im realen Einsatz aber an Randfällen scheitert.
 
 \section{Herausforderungen und Chancen}
 \subsection{Herausforderungen}
-Die grösste Herausforderung ist die Uneinheitlichkeit der Moodle-Kurse. Kursstrukturen unterscheiden sich, Semesterinformationen sind nicht überall gleich benannt, und PDFs können unterschiedliche Formate besitzen. Dadurch ist es schwierig, mit starren Selektoren oder einfachen Regeln alle relevanten Informationen zuverlässig zu finden. Eine zweite Herausforderung betrifft API- und Login-Fehler. Abgelaufene Sessions, falsche Credentials oder geänderte Schnittstellen müssen sauber behandelt werden. Drittens sind LLM-Antworten nicht deterministisch. Auch bei guten Prompts können Antworten zu kurz, unvollständig oder falsch strukturiert sein.
+Die grösste Herausforderung ist die Uneinheitlichkeit der Moodle-Kurse. Die Kursstrukturen unterscheiden sich, Semesterinformationen tragen nicht überall denselben Namen, und PDFs liegen in unterschiedlichen Formaten vor. Mit starren Selektoren oder einfachen Regeln lassen sich deshalb nicht alle relevanten Informationen zuverlässig finden. Eine zweite Herausforderung sind API- und Login-Fehler: Abgelaufene Sessions, falsche Credentials oder geänderte Schnittstellen müssen sauber abgefangen werden. Hinzu kommt, dass LLM-Antworten nicht deterministisch sind und selbst bei guten Prompts zu kurz, unvollständig oder falsch strukturiert ausfallen können.
 
-Die Lösung begegnet diesen Herausforderungen durch mehrere Massnahmen: API-Nutzung statt reinem UI-Scraping, JSON-Zwischenspeicherung, Validierung vor und nach dem LLM-Aufruf, Retry-Logik, Logging und klare Exception-Pfade. Besonders wichtig ist die Trennung zwischen Rohdaten und generiertem Lernplan. Dadurch bleibt nachvollziehbar, welche Informationen aus Moodle stammen und welche Strukturierung durch das LLM erzeugt wurde.
+Die Lösung begegnet diesen Herausforderungen mit mehreren Massnahmen: API-Nutzung statt reinem UI-Scraping, JSON-Zwischenspeicherung, Validierung vor und nach dem LLM-Aufruf, Retry-Logik, Logging und klar definierte Exception-Pfade. Besonders wichtig ist die Trennung von Rohdaten und generiertem Lernplan, denn so bleibt nachvollziehbar, welche Informationen aus Moodle stammen und welche Strukturierung das LLM beigesteuert hat.
 
 \subsection{Chancen}
-Die Chancen sind deutlich. Der Prozess spart Zeit, ist skalierbar und kann individuell auf Studierende angepasst werden. Ausserdem zeigt er den Mehrwert einer kombinierten Automatisierung: RPA übernimmt die Prozessführung, APIs liefern Daten, und GenAI erzeugt aus unstrukturierten Informationen eine verständliche Planung. Diese Kombination ist interessanter als eine reine Klick-Automatisierung, weil sie nicht nur Arbeitszeit reduziert, sondern auch die Qualität der Informationsaufbereitung verbessern kann.
+Die Chancen sind beträchtlich. Der Prozess spart Zeit, ist skalierbar und lässt sich individuell auf einzelne Studierende zuschneiden. Darüber hinaus zeigt er den Mehrwert einer kombinierten Automatisierung: RPA übernimmt die Prozessführung, APIs liefern die Daten, und generative KI formt aus unstrukturierten Informationen eine verständliche Planung. Diese Kombination ist reizvoller als eine reine Klick-Automatisierung, weil sie nicht nur Arbeitszeit spart, sondern auch die Qualität der Informationsaufbereitung erhöht.
 
 \section{Reflexion und Ausblick}
 \subsection{Lernprozess und Aufgabenteilung}
 
-Das Projekt zeigt, dass eine gute RPA-Lösung nicht mit dem Bot beginnt, sondern mit Prozessverständnis. Erst durch die Prozessbeschreibung im SDD wurde sichtbar, welche Schritte wirklich automatisiert werden sollen, welche Daten benötigt werden und wo Ausnahmen entstehen können. Wichtig war auch die Erkenntnis, dass UiPath nicht zwingend jede Aktion über die Benutzeroberfläche ausführen muss. Gerade im Moodle-Kontext ist ein API-basierter Zugriff stabiler und besser wartbar. UiPath wird dadurch nicht weniger relevant, sondern übernimmt eine übergeordnete Rolle als Orchestrator.
+Das Projekt zeigt, dass eine gute RPA-Lösung nicht beim Bot beginnt, sondern beim Prozessverständnis. Erst die Prozessbeschreibung im SDD machte sichtbar, welche Schritte tatsächlich automatisiert werden sollen, welche Daten dafür nötig sind und wo Ausnahmen entstehen können. Wichtig war zudem die Erkenntnis, dass UiPath nicht jede Aktion über die Benutzeroberfläche ausführen muss: Gerade im Moodle-Kontext ist ein API-basierter Zugriff stabiler und wartungsfreundlicher. UiPath verliert dadurch nicht an Bedeutung, sondern übernimmt die übergeordnete Rolle des Orchestrators.
 
-Für die Gruppenarbeit war eine klare Aufgabenteilung zentral. Da RPA-Projekte inhärent fachliche und technische Rollen verbinden, wurden die Verantwortlichkeiten gemäss den individuellen Kernkompetenzen wie in Tabelle~\ref{tab:aufgabenteilung} dargestellt aufgeteilt. Ohne Prozessverantwortung entsteht ein technisch funktionierender, aber fachlich schwacher Bot; ohne technische Umsetzung bleibt die Analyse abstrakt.
+Für die Gruppenarbeit war eine klare Aufgabenteilung zentral. Da RPA-Projekte fachliche und technische Rollen miteinander verbinden, wurden die Verantwortlichkeiten entlang der individuellen Kernkompetenzen aufgeteilt, wie Tabelle~\ref{tab:aufgabenteilung} zeigt. Ohne Prozessverantwortung entsteht ein technisch funktionierender, aber fachlich schwacher Bot; ohne technische Umsetzung bleibt die Analyse abstrakt.
 
 \begin{table}[htbp]
 \centering
@@ -248,19 +283,17 @@ Für die Gruppenarbeit war eine klare Aufgabenteilung zentral. Da RPA-Projekte i
 \end{tabularx}
 \end{table}
 
-Inhaltlich ergänzten sich damit Prozesssicht, technische Umsetzung, Dokumentation und Präsentation optimal.
+Inhaltlich ergänzten sich so Prozesssicht, technische Umsetzung, Dokumentation und Präsentation.
 
-Ein zentrales Learning ist, dass Low-/No-Code-Werkzeuge wie UiPath schnelle Ergebnisse ermöglichen, aber keine saubere Analyse ersetzen. Gerade Exception Handling, Datenvalidierung und Sicherheit müssen bewusst entworfen werden. Ebenfalls deutlich wurde, dass GenAI im RPA-Kontext kein Ersatz für Prozesslogik ist. Das LLM soll nicht entscheiden, welche Kurse relevant sind oder ob Credentials gültig sind; es soll strukturierte Rohdaten sprachlich und planerisch verdichten. Diese klare Rollenverteilung zwischen Bot-Logik und KI erhöht die Qualität der Lösung.
-
-
+Eine zentrale Erkenntnis ist, dass Low-/No-Code-Werkzeuge wie UiPath zwar schnelle Ergebnisse ermöglichen, eine saubere Analyse aber nicht ersetzen. Gerade Exception Handling, Datenvalidierung und Sicherheit müssen bewusst entworfen werden. Ebenso deutlich wurde, dass generative KI im RPA-Kontext kein Ersatz für die Prozesslogik ist: Das LLM soll nicht entscheiden, welche Kurse relevant oder welche Credentials gültig sind, sondern strukturierte Rohdaten sprachlich und planerisch verdichten. Diese klare Rollenverteilung zwischen Bot-Logik und KI erhöht die Qualität der Lösung.
 
 \subsection{Ausblick und Auswirkungen von RPA und AI}
-Die naheliegendste Erweiterung ist eine Kalenderintegration. Deadlines und Lernblöcke könnten automatisch in Google Calendar oder Outlook geschrieben werden. Zusätzlich wären Benachrichtigungen sinnvoll, etwa Erinnerungen einige Tage vor Abgaben oder Warnungen bei besonders vielen Deadlines in einer Woche. Eine weitere Verbesserung wäre ein personalisiertes Prioritätsmodell, das Lernaufwand, Prüfungsnähe, ECTS-Gewichtung oder individuelle Präferenzen berücksichtigt.
+Die naheliegendste Erweiterung ist eine Kalenderintegration: Deadlines und Lernblöcke liessen sich automatisch in Google Calendar oder Outlook eintragen. Sinnvoll wären zusätzlich Benachrichtigungen, etwa Erinnerungen einige Tage vor Abgaben oder Warnungen, wenn sich in einer Woche besonders viele Deadlines häufen. Einen weiteren Schritt voraus wäre ein personalisiertes Prioritätsmodell, das Lernaufwand, Prüfungsnähe, ECTS-Gewichtung und individuelle Präferenzen berücksichtigt.
 
-Über den konkreten Studienkontext hinaus zeigt das Projekt, wie Automatisierungstechnologien Unternehmen und Gesellschaft verändern können. RPA reduziert repetitive administrative Arbeit, während AI unstrukturierte Informationen besser nutzbar macht. In Unternehmen kann dies zu effizienteren Backoffice-Prozessen, schnellerer Informationsverarbeitung und höherer Servicequalität führen. Gleichzeitig entstehen Anforderungen an Governance, Datenschutz, Nachvollziehbarkeit und Weiterbildung. Automatisierung sollte deshalb nicht als blosser Ersatz menschlicher Arbeit verstanden werden, sondern als Gestaltung von Arbeit: Menschen sollen weniger Zeit mit repetitiver Informationssuche verbringen und mehr Zeit für Bewertung, Entscheidung und kreative Problemlösung haben.
+Über den konkreten Studienkontext hinaus zeigt das Projekt, wie Automatisierungstechnologien Unternehmen und Gesellschaft verändern können. RPA reduziert repetitive administrative Arbeit, während KI unstrukturierte Informationen besser nutzbar macht. In Unternehmen kann dies zu effizienteren Backoffice-Prozessen, schnellerer Informationsverarbeitung und höherer Servicequalität führen. Zugleich wachsen die Anforderungen an Governance, Datenschutz, Nachvollziehbarkeit und Weiterbildung. Automatisierung sollte deshalb nicht als blosser Ersatz menschlicher Arbeit verstanden werden, sondern als deren Neugestaltung: Menschen sollen weniger Zeit mit repetitiver Informationssuche verbringen und mehr Zeit für Bewertung, Entscheidung und kreative Problemlösung gewinnen.
 
 \section{Fazit}
-Der Moodle-to-LLM Study Planner erfüllt die Anforderungen an einen geeigneten RPA-Prozess. Er ist digital, wiederkehrend, regelbasiert, wirtschaftlich relevant und zugleich anspruchsvoll genug, um technische Qualifikation, Exception Handling und AI-Integration zu diskutieren. Der Zielprozess automatisiert nicht nur einzelne Klicks, sondern verbindet Moodle-Daten, UiPath-Orchestrierung, strukturierte Speicherung, LLM-Verarbeitung und Reporting. Die Wirtschaftlichkeitsrechnung zeigt ein plausibles Nutzenpotenzial von 35 Stunden pro Semester und einen positiven ROI im kleinen Setup. Die wichtigsten Risiken liegen in uneinheitlichen Kursstrukturen, PDF-Varianten, Login- und API-Fehlern sowie der Qualität von LLM-Antworten. Durch Validierung, Logging, Retry-Mechanismen und klare Datenstrukturen können diese Risiken reduziert werden. Insgesamt zeigt die Arbeit, dass Hyperautomation besonders wertvoll wird, wenn RPA, APIs und GenAI bewusst zusammengedacht werden.
+Der \textit{Moodle-to-LLM Study Planner} erfüllt die Anforderungen an einen geeigneten RPA-Prozess. Er ist digital, wiederkehrend, regelbasiert, wirtschaftlich relevant und zugleich anspruchsvoll genug, um technische Qualifikation, Exception Handling und KI-Integration zu diskutieren. Dabei automatisiert er nicht nur einzelne Klicks, sondern verbindet Moodle-Daten, UiPath-Orchestrierung, strukturierte Speicherung, LLM-Verarbeitung und Reporting zu einem durchgängigen Ablauf. Die Wirtschaftlichkeitsrechnung weist ein plausibles Nutzenpotenzial von rund 10,5 Stunden pro Studierende:r und Semester aus; da die laufenden Kosten dank kostenloser Werkzeuge nahezu null sind, ist der einmalige Entwicklungsaufwand bereits im ersten Semester amortisiert. Die wichtigsten Risiken liegen in uneinheitlichen Kursstrukturen, PDF-Varianten, Login- und API-Fehlern sowie der Qualität der LLM-Antworten; sie lassen sich durch Validierung, Logging, Retry-Mechanismen und klare Datenstrukturen eindämmen. Insgesamt zeigt die Arbeit, dass Hyperautomation besonders dann wertvoll wird, wenn RPA, APIs und generative KI bewusst zusammengedacht werden.
 
 \newpage
 \section*{Anhang}
