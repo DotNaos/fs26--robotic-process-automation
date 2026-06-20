@@ -32,43 +32,78 @@ Der Ist-Prozess beginnt mit der manuellen Suche in Moodle. Studierende öffnen K
 
 \begin{figure}[h]
 \centering
-\resizebox{\textwidth}{!}{%
+\resizebox{0.96\textwidth}{!}{%
 \begin{tikzpicture}[
-  node distance=1.45cm,
-  task/.style={rectangle,rounded corners,draw,align=center,minimum width=3.0cm,minimum height=0.8cm,font=\scriptsize},
-  event/.style={ellipse,draw,align=center,minimum width=1.7cm,minimum height=0.75cm,font=\scriptsize},
-  gate/.style={diamond,draw,aspect=1.9,align=center,inner sep=1pt,font=\scriptsize},
-  arrow/.style={-{Latex[length=2mm]},thick}
+  task/.style={rectangle,rounded corners,draw,align=center,minimum width=2.85cm,minimum height=0.76cm,font=\scriptsize},
+  event/.style={ellipse,draw,align=center,minimum width=1.5cm,minimum height=0.66cm,font=\scriptsize},
+  gate/.style={diamond,draw,aspect=2.0,align=center,inner sep=1pt,font=\scriptsize},
+  arrow/.style={-{Latex[length=1.6mm,width=1.3mm]},thick,shorten >=1pt,shorten <=1pt},
+  looparrow/.style={-{Latex[length=1.6mm,width=1.3mm]},thick,rounded corners=4pt,shorten >=1pt,shorten <=1pt}
 ]
-\node[event] (start) {Start};
-\node[task,right=of start] (config) {Config und\\API Keys laden};
-\node[task,right=of config] (moodle) {Moodle Login\\Session prüfen};
-\node[task,right=of moodle] (courses) {Kursliste via\\API/CLI lesen};
-\node[gate,below=of courses] (next) {weiterer\\Kurs?};
-\node[task,left=of next] (scrape) {Kursdetails und\\Semesterinfo lesen};
-\node[task,left=of scrape] (llm) {Daten an\\LLM senden};
-\node[gate,below=of llm] (valid) {Antwort\\gültig?};
-\node[task,left=of valid] (retry) {Retry bis\\max. 3};
-\node[task,below=of next] (pdf) {PDF-Report\\generieren};
-\node[task,right=of next] (mail) {Abschluss-E-Mail\\senden};
-\node[event,below=of mail] (end) {Ende};
 
-\draw[arrow] (start) -- (config);
-\draw[arrow] (config) -- (moodle);
-\draw[arrow] (moodle) -- (courses);
+% Hauptpfad: Initialisierung, Kursverarbeitung und Speichern
+\node[event] (start) at (0,0) {Start};
+\node[task] (scope) at (0,-1.35) {Empfänger, Semester\\und Filter laden};
+\node[task] (access) at (0,-2.70) {Moodle-Zugriff\\prüfen};
+\node[task] (courses) at (0,-4.05) {Kurse für Semester\\abrufen};
+\node[gate] (next) at (0,-5.65) {weiterer\\Kurs?};
+\node[task] (course) at (0,-7.25) {Nächsten Moodle-\\Kurs auswählen};
+\node[task] (resources) at (0,-8.60) {Ressourcenliste des\\Kurses abrufen};
+\node[task] (semester) at (0,-9.95) {Semesterinfo aus\\Ressourcen finden};
+\node[task] (deadlines) at (0,-11.30) {Abgaben, Termine\\und Prüfungen lesen};
+\node[task] (topics) at (0,-12.65) {Themenblöcke und\\Aufwand erfassen};
+\node[task] (priority) at (0,-14.00) {Lernschwerpunkte\\und Reihenfolge ableiten};
+\node[task] (prompt) at (0,-15.10) {Prompt an Gemini\\senden};
+\node[gate] (valid) at (0,-17.00) {Antwort\\lang genug?};
+\node[task] (take) at (0,-18.65) {Lernplan aus\\Antwort übernehmen};
+\node[task] (save) at (0,-20.00) {Lernplan als\\Markdown speichern};
+\node[task] (done) at (0,-21.35) {Kurs abschließen};
+
+% Retry-Ast: nur gleicher Aufruf, keine Prompt-Anpassung
+\node[gate] (retry) at (5.4,-17.00) {Retry\\$< 3$?};
+\node[task] (repeat) at (5.4,-15.10) {Gemini-Aufruf\\wiederholen};
+\node[task] (error) at (5.4,-21.35) {Kurs als fehlerhaft\\loggen};
+
+% Abschluss nach dem letzten Kurs
+\node[task] (collect) at (4.9,-5.65) {Alle Markdown-\\Lernpläne sammeln};
+\node[task] (render) at (8.7,-5.65) {HTML/PDF-Berichte\\erzeugen};
+\node[task] (mail) at (12.5,-5.65) {PDFs als E-Mail-\\Anhang versenden};
+\node[event] (end) at (15.8,-5.65) {Ende};
+
+% Initialisierung und Kursdaten
+\draw[arrow] (start) -- (scope);
+\draw[arrow] (scope) -- (access);
+\draw[arrow] (access) -- (courses);
 \draw[arrow] (courses) -- (next);
-\draw[arrow] (next) -- node[above,font=\scriptsize]{ja} (scrape);
-\draw[arrow] (scrape) -- (llm);
-\draw[arrow] (llm) -- (valid);
-\draw[arrow] (valid) -- node[above,font=\scriptsize]{ja} (pdf);
-\draw[arrow] (valid) -- node[above,font=\scriptsize]{nein} (retry);
-\draw[arrow] (pdf) -- (next);
-\draw[arrow] (next) -- node[above,font=\scriptsize]{nein} (mail);
-\draw[arrow] (retry) |- (llm);
+\draw[arrow] (next) -- node[right,font=\scriptsize]{ja} (course);
+\draw[arrow] (resources) -- (semester);
+\draw[arrow] (semester) -- (deadlines);
+\draw[arrow] (deadlines) -- (topics);
+\draw[arrow] (topics) -- (priority);
+\draw[arrow] (course) -- (resources);
+\draw[arrow] (priority) -- (prompt);
+
+% KI und Validierung
+\draw[arrow] (prompt) -- (valid);
+\draw[arrow] (valid) -- node[right,font=\scriptsize]{ja} (take);
+\draw[arrow] (take) -- (save);
+\draw[arrow] (valid.east) -- node[above,font=\scriptsize]{nein} (retry.west);
+\draw[arrow] (retry) -- node[right,font=\scriptsize]{ja} (repeat);
+\draw[arrow] (repeat.west) -- (prompt.east);
+\draw[arrow] (retry) -- node[right,font=\scriptsize]{nein} (error);
+\draw[arrow] (save) -- (done);
+\draw[arrow] (error.west) -- (done.east);
+
+% Kursabschluss und Abschlussprozess
+\draw[looparrow] (done.west) -- ++(-2.15,0) |- (next.west);
+\draw[arrow] (next.east) -- node[above,font=\scriptsize]{nein} (collect.west);
+\draw[arrow] (collect) -- (render);
+\draw[arrow] (render) -- (mail);
 \draw[arrow] (mail) -- (end);
+
 \end{tikzpicture}
 }
-\caption{BPMN-orientierte Übersicht des Zielprozesses}
+\caption{BPMN-orientierte Übersicht des fachlichen Zielprozesses}
 \end{figure}
 
 \section{Prozessqualifizierung}
